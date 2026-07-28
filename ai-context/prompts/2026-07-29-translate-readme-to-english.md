@@ -1,9 +1,9 @@
 ---
 id: "2026-07-29-translate-readme-to-english"
-status: awaiting-confirmation
+status: completed
 created_at: "2026-07-29T00:52:38+07:00"
-confirmed_at: null
-completed_at: null
+confirmed_at: "2026-07-29T01:19:31+07:00"
+completed_at: "2026-07-29T01:20:09+07:00"
 ---
 
 # Goal
@@ -20,6 +20,7 @@ Translate the polished root README from Vietnamese to clear, natural English.
 - `ai-context/ai-workflow-rules.md`
 - `README.md`
 - Current Git status
+- The current `HEAD` version of `README.md` after it changed following confirmation
 
 # Files likely to change
 
@@ -30,8 +31,9 @@ Translate the polished root README from Vietnamese to clear, natural English.
 
 - Translate all descriptive content, headings, link labels, table headings, and notes into English.
 - Keep the Vietnamese product name `Vạn Nẻo` unchanged as a proper name.
-- Preserve the current Markdown structure, technical facts, commands, URLs, environment-variable names, and
-  deployment-document link.
+- Preserve the current concise Markdown structure, technical facts, and URLs.
+- Do not restore the setup, environment, checks, architecture, security, or deployment sections that are no longer
+  present in the current README.
 - Do not revise application UI localization; this request applies only to the README.
 
 # Open questions
@@ -41,9 +43,7 @@ Translate the polished root README from Vietnamese to clear, natural English.
 # Implementation requirements
 
 - Use concise, natural technical English throughout `README.md`.
-- Keep commands and configuration identifiers unchanged.
-- Preserve the existing heading hierarchy, technology table, setup instructions, environment table, checks, and
-  architecture/security notes.
+- Preserve the existing title, introduction, demo/API links, and technology table.
 - Keep the file encoded as UTF-8 with a final newline.
 
 # API contract and external backend dependencies
@@ -54,7 +54,7 @@ Translate the polished root README from Vietnamese to clear, natural English.
 # Security requirements
 
 - Do not introduce secrets or copy values from the local `.env`.
-- Preserve the existing public-environment-variable and memory-only token guidance.
+- Do not introduce new security or configuration claims.
 
 # Accessibility requirements
 
@@ -63,7 +63,7 @@ Translate the polished root README from Vietnamese to clear, natural English.
 # Acceptance criteria
 
 - All README prose is in English, except the `Vạn Nẻo` product name.
-- Technical meaning and repository instructions remain unchanged.
+- Technical meaning and the current concise scope remain unchanged.
 - Markdown remains clean and easy to scan.
 - Only README and workflow prompt files change.
 
@@ -71,7 +71,7 @@ Translate the polished root README from Vietnamese to clear, natural English.
 
 - `git diff --check`
 - Manually inspect the README for remaining Vietnamese prose.
-- Manually compare commands, URLs, and environment-variable names before and after translation.
+- Manually compare URLs and technology names before and after translation.
 
 # Manual testing steps
 

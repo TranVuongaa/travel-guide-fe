@@ -1,17 +1,17 @@
 # Vạn Nẻo — Travel Guide Frontend
 
-Ứng dụng khám phá du lịch và cộng đồng dành cho người yêu những miền đất Việt Nam.
-Được xây dựng hoàn toàn ở phía frontend với Next.js App Router và kết nối tới API độc lập.
+A travel discovery and community app for people who love exploring Vietnam.
+Built as a frontend-only Next.js App Router application connected to an independently deployed API.
 
-> [Khám phá bản demo](http://52.62.25.92) · [Xem tài liệu API](http://52.62.25.92/api/docs)
+> [View live demo](http://52.62.25.92) · [Explore the API docs](http://52.62.25.92/api/docs)
 
-## Công nghệ chính
+## Core technologies
 
-| Công nghệ | Vai trò |
+| Technology | Purpose |
 | --- | --- |
-| Next.js 16 + React 19 | Giao diện và định tuyến App Router |
-| TypeScript | Kiểm tra kiểu dữ liệu nghiêm ngặt |
-| Tailwind CSS 4 | Hệ thống giao diện và responsive |
-| Redux Toolkit | Trạng thái dùng chung phía client |
-| Axios | Kết nối tới API bên ngoài |
-| Vitest + Testing Library | Unit test và component test |
+| Next.js 16 + React 19 | User interface and App Router navigation |
+| TypeScript | Strict type checking |
+| Tailwind CSS 4 | Responsive design system |
+| Redux Toolkit | Shared client-side state |
+| Axios | External API communication |
+| Vitest + Testing Library | Unit and component testing |
