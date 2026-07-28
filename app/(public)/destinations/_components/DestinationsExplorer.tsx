@@ -13,6 +13,7 @@ import {listProvincesService} from '@/lib/feature/provinces/api';
 import {formatNumber} from '@/utils/format';
 
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
+import {EntityImage, getPrimaryEntityImage} from '@/components/ui/EntityImage';
 import {Pagination} from '@/components/ui/Pagination';
 
 import type {Category, PaginatedData, Place, Province, SortOrder} from '@/types/api';
@@ -127,14 +128,25 @@ export function DestinationsExplorer() {
           <p className='mb-5 text-sm text-muted'>{formatNumber(data.totalItems)} điểm đến</p>
           <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3'>
             {data.items.map((place) => (
-              <Link key={place.id} href={routes.destination(place.id)} className='card group transition hover:-translate-y-1 hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'>
-                <p className='text-xs font-bold uppercase tracking-[0.16em] text-brand'>{place.province.name}</p>
-                <h2 className='mt-4 font-display text-3xl font-semibold'>{place.name}</h2>
-                <p className='mt-3 line-clamp-3 text-sm leading-6 text-muted'>{place.description}</p>
-                <div className='mt-6 flex flex-wrap gap-2'>
-                  {place.categories.map((category) => <span key={category.id} className='rounded-full bg-accent/35 px-3 py-1 text-xs font-semibold'>{category.name}</span>)}
+              <Link
+                key={place.id}
+                href={routes.destination(place.id)}
+                className='group overflow-hidden rounded-panel border border-line bg-surface transition hover:-translate-y-1 hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
+              >
+                <EntityImage
+                  image={getPrimaryEntityImage(place.images, place.province.images)}
+                  altFallback={`Ảnh về ${place.name}`}
+                  frameClassName='aspect-[4/3] border-b border-line'
+                />
+                <div className='p-6'>
+                  <p className='text-xs font-bold uppercase tracking-[0.16em] text-brand'>{place.province.name}</p>
+                  <h2 className='mt-4 font-display text-3xl font-semibold'>{place.name}</h2>
+                  <p className='mt-3 line-clamp-3 text-sm leading-6 text-muted'>{place.description}</p>
+                  <div className='mt-6 flex flex-wrap gap-2'>
+                    {place.categories.map((category) => <span key={category.id} className='rounded-full bg-accent/35 px-3 py-1 text-xs font-semibold'>{category.name}</span>)}
+                  </div>
+                  <p className='mt-5 text-sm font-semibold'>★ {place.avgRating.toFixed(1)} · {place.reviewCount} đánh giá</p>
                 </div>
-                <p className='mt-5 text-sm font-semibold'>★ {place.avgRating.toFixed(1)} · {place.reviewCount} đánh giá</p>
               </Link>
             ))}
           </div>

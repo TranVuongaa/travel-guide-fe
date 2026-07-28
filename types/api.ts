@@ -51,10 +51,24 @@ export type SafeAuthor = {
   avatarUrl: string | null;
 };
 
+export type EntityImage = {
+  id: string;
+  url: string;
+  sourcePageUrl: string;
+  altText: string;
+  author: string | null;
+  licenseName: string;
+  licenseUrl: string | null;
+  width: number | null;
+  height: number | null;
+  sortOrder: number;
+};
+
 export type Province = {
   id: string;
   name: string;
   slug: string;
+  images: EntityImage[];
 };
 
 export type Category = {
@@ -86,6 +100,7 @@ export type Place = {
   updatedAt: string;
   province: Province;
   categories: Category[];
+  images: EntityImage[];
 };
 
 export type ReactionCounts = Record<ReactionType, number>;

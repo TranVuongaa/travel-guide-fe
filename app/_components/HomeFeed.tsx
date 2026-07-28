@@ -9,6 +9,8 @@ import {listPlacesService} from '@/lib/feature/places/api';
 import {listPostsService} from '@/lib/feature/posts/api';
 import {formatDate} from '@/utils/format';
 
+import {EntityImage, getPrimaryEntityImage} from '@/components/ui/EntityImage';
+
 import type {Place, Post} from '@/types/api';
 
 export function HomeFeed() {
@@ -56,11 +58,20 @@ export function HomeFeed() {
               <Link
                 key={place.id}
                 href={routes.destination(place.id)}
-                className='group min-h-72 rounded-panel border border-line bg-surface p-6 transition hover:-translate-y-1 hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
+                className='group overflow-hidden rounded-panel border border-line bg-surface transition hover:-translate-y-1 hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
               >
-                <p className='text-xs font-bold uppercase tracking-[0.2em] text-brand'>0{index + 1} · {place.province.name}</p>
-                <h3 className='mt-16 font-display text-4xl font-semibold'>{place.name}</h3>
-                <p className='mt-4 line-clamp-3 text-sm leading-6 text-muted'>{place.description}</p>
+                <EntityImage
+                  image={getPrimaryEntityImage(place.images, place.province.images)}
+                  altFallback={`Ảnh về ${place.name}`}
+                  frameClassName='aspect-[4/3] border-b border-line'
+                />
+                <div className='p-6'>
+                  <p className='text-xs font-bold uppercase tracking-[0.2em] text-brand'>
+                    0{index + 1} · {place.province.name}
+                  </p>
+                  <h3 className='mt-8 font-display text-4xl font-semibold'>{place.name}</h3>
+                  <p className='mt-4 line-clamp-3 text-sm leading-6 text-muted'>{place.description}</p>
+                </div>
               </Link>
             ))}
           </div>

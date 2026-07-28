@@ -45,7 +45,8 @@ comments, and reactions. Editors manage destinations. Administrators manage user
 - API contract source: OpenAPI 3.0 at `http://52.62.25.92/api/docs-json` (`Vietnam Travel Guide API` v1.0).
 - Browser origins/CORS: `http://localhost:3000` is confirmed. Other HTTP deployment origins must be allowed by the
   backend.
-- Public access: provinces, categories, published places/posts/reviews/comments, and reaction summaries.
+- Public access: provinces, categories, published places/posts/reviews/comments, and reaction summaries. Province and
+  place responses include ordered image metadata with source and license attribution fields.
 - Protected access: current/admin user reads, current-user posts/reviews, and all non-auth mutations.
 - Client UX roles: `ADMIN` for users/provinces/categories; `EDITOR|ADMIN` for places; authenticated ownership for
   community content. Backend authorization is authoritative.
@@ -111,4 +112,9 @@ Vietnamese `Intl` formatting.
   control.
 - The API does not expose the current user's selected reaction, so selected-state restoration is unavailable after a
   reload.
+- The live non-production data currently returns empty image arrays for provinces and places, and nested province
+  objects in place responses temporarily omit their documented image arrays. The frontend tolerates both cases with
+  stable placeholders.
+- The API does not guarantee a narrow set of external image hosts, so remote entity images are loaded directly by the
+  browser after HTTP(S) URL validation instead of through the Next.js image optimizer.
 - Privileged live verification still requires non-production `EDITOR` and `ADMIN` credentials.

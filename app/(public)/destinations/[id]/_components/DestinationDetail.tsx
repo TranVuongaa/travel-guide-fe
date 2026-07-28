@@ -7,6 +7,7 @@ import {getPlaceService} from '@/lib/feature/places/api';
 
 import {ReviewSection} from '@/components/community/ReviewSection';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
+import {EntityImage, getOrderedEntityImages, getPrimaryEntityImage} from '@/components/ui/EntityImage';
 
 import type {Place} from '@/types/api';
 
@@ -33,11 +34,36 @@ export function DestinationDetail({id}: Readonly<{id: string}>) {
     return <LoadingState label='Đang mở điểm đến…' />;
   }
 
+  const placeImages = getOrderedEntityImages(place.images);
+  const primaryImage = placeImages[0] ?? getPrimaryEntityImage(place.province.images);
+  const galleryImages = placeImages.slice(1);
+
   return (
     <>
       <article>
         <p className='eyebrow'>{place.province.name}</p>
         <h1 className='mt-5 max-w-5xl font-display text-[clamp(3.5rem,10vw,8rem)] font-semibold leading-[0.85] tracking-[-0.055em]'>{place.name}</h1>
+        <EntityImage
+          image={primaryImage}
+          altFallback={`Ảnh toàn cảnh ${place.name}`}
+          className='mt-8'
+          frameClassName='aspect-[16/9] rounded-panel border border-line shadow-editorial'
+          loading='eager'
+          showAttribution
+        />
+        {galleryImages.length > 0 ? (
+          <div className='mt-5 grid gap-5 sm:grid-cols-2'>
+            {galleryImages.map((image) => (
+              <EntityImage
+                key={image.id}
+                image={image}
+                altFallback={`Ảnh về ${place.name}`}
+                frameClassName='aspect-[4/3] rounded-2xl border border-line'
+                showAttribution
+              />
+            ))}
+          </div>
+        ) : null}
         <div className='mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]'>
           <div>
             <p className='whitespace-pre-wrap text-lg leading-8 text-muted'>{place.description}</p>

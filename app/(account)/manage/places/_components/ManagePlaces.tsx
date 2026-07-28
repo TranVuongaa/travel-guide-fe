@@ -10,6 +10,7 @@ import {CONTENT_STATUS_LABELS} from '@/utils/format';
 
 import {AuthGuard} from '@/components/auth/AuthGuard';
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
+import {EntityImage, getPrimaryEntityImage} from '@/components/ui/EntityImage';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
 import type {Place} from '@/types/api';
@@ -67,7 +68,13 @@ export function ManagePlaces() {
         <div className='space-y-4'>
           {places.map((place) => (
             <article key={place.id} className='card flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between'>
-              <div>
+              <EntityImage
+                image={getPrimaryEntityImage(place.images, place.province.images)}
+                altFallback={`Ảnh về ${place.name}`}
+                className='w-full shrink-0 sm:w-40'
+                frameClassName='aspect-[4/3] rounded-2xl border border-line'
+              />
+              <div className='min-w-0 flex-1'>
                 <p className='text-xs font-bold uppercase tracking-[0.14em] text-brand'>{place.province.name}</p>
                 <h2 className='mt-2 font-display text-3xl font-semibold'>{place.name}</h2>
                 <p className='mt-2 text-sm text-muted'>{CONTENT_STATUS_LABELS[place.status]} · {place.categories.map((item) => item.name).join(', ')}</p>

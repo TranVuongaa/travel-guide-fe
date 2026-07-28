@@ -22,6 +22,7 @@ import {
 } from '@/lib/feature/provinces/api';
 
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
+import {EntityImage, getPrimaryEntityImage} from '@/components/ui/EntityImage';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
@@ -178,20 +179,38 @@ export function TaxonomyManager({kind}: Readonly<{kind: Kind}>) {
         {status === 'error' ? <ErrorState message={error} onRetry={() => void load()} /> : null}
         {status === 'ready' && data.items.length === 0 ? <EmptyState title={`Chưa có ${copy.singular}`} /> : null}
         <div className='space-y-3'>
-          {data.items.map((item) => (
-            <article key={item.id} className='flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 sm:flex-row sm:items-center sm:justify-between'>
-              <div><h2 className='font-semibold'>{item.name}</h2><p className='mt-1 text-xs text-muted'>/{item.slug} · {item.id}</p></div>
-              <div className='flex gap-2'>
-                <button type='button' onClick={() => void handleEdit(item.id)} className='button-secondary'>Sửa</button>
-                <ConfirmButton
-                  label='Xóa'
-                  title={`Xóa “${item.name}”?`}
-                  description={copy.warning}
-                  onConfirm={() => handleDelete(item.id)}
-                />
-              </div>
-            </article>
-          ))}
+          {data.items.map((item) => {
+            const provinceImage =
+              kind === 'province' && 'images' in item ? getPrimaryEntityImage(item.images) : null;
+
+            return (
+              <article key={item.id} className='flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 sm:flex-row sm:items-center sm:justify-between'>
+                <div className='flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:items-center'>
+                  {kind === 'province' ? (
+                    <EntityImage
+                      image={provinceImage}
+                      altFallback={`Ảnh về ${item.name}`}
+                      className='w-full shrink-0 sm:w-28'
+                      frameClassName='aspect-[4/3] rounded-xl border border-line'
+                    />
+                  ) : null}
+                  <div className='min-w-0'>
+                    <h2 className='font-semibold'>{item.name}</h2>
+                    <p className='mt-1 break-all text-xs text-muted'>/{item.slug} · {item.id}</p>
+                  </div>
+                </div>
+                <div className='flex gap-2'>
+                  <button type='button' onClick={() => void handleEdit(item.id)} className='button-secondary'>Sửa</button>
+                  <ConfirmButton
+                    label='Xóa'
+                    title={`Xóa “${item.name}”?`}
+                    description={copy.warning}
+                    onConfirm={() => handleDelete(item.id)}
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
         <Pagination page={data.page} totalPages={data.totalPages} />
       </div>
