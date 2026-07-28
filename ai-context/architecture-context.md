@@ -192,6 +192,7 @@ components/
 lib/
 ├── api/
 │   ├── client.ts
+│   ├── endpoints.ts
 │   ├── errors.ts
 │   └── response.ts
 └── feature/
@@ -210,9 +211,11 @@ types/
 ```
 
 - `lib/api/client.ts`: The one shared Axios instance, safe defaults, and interceptors.
+- `lib/api/endpoints.ts`: The one shared, domain-grouped registry for external API path constants and builders.
 - `lib/api/errors.ts`: Converts unknown Axios failures into serializable application errors.
 - `lib/api/response.ts`: Narrows shared API response envelopes.
-- `lib/feature/<domain>/api.ts`: Colocates endpoint constants and typed service functions for one API domain.
+- `lib/feature/<domain>/api.ts`: Contains typed service functions for one API domain and consumes the shared endpoint
+  registry.
 - `types/api.ts`: Shared response envelopes, pagination, enums, request contracts, and cross-domain API shapes.
 - Split a domain API module only when its size or responsibilities justify additional files in the same domain folder.
 - Components and Hooks never call Axios directly.
@@ -402,7 +405,7 @@ migration. Application modules not represented in the table still use `.ts` with
 1. Obtain the confirmed external API contract.
 2. Add or update shared request and response types in `types/api.ts`, or domain-local types in the relevant feature
    API module.
-3. Add the endpoint constant or builder if needed.
+3. Add the endpoint constant or builder to `lib/api/endpoints.ts` if needed.
 4. Add a typed service function to the relevant domain API module using the shared Axios client.
 5. Normalize the response and errors.
 6. Use a route-private Hook for local data or a typed Redux thunk for shared state.

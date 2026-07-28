@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 import {env} from '@/config/env';
+import {API_ENDPOINTS} from '@/lib/api/endpoints';
 import {clearCredentials, getCredentials, setCredentials} from '@/lib/auth/credentials';
 
 import type {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import type {ApiSuccess, AuthResponse} from '@/types/api';
-
-const REFRESH_ENDPOINT = '/api/v1/auth/refresh';
 
 type RetriableConfig = InternalAxiosRequestConfig & {
   hasRetriedAuth?: boolean;
@@ -41,7 +40,7 @@ const refreshCredentials = async (): Promise<AuthResponse> => {
   }
 
   const response = await apiClient.post<ApiSuccess<AuthResponse>>(
-    REFRESH_ENDPOINT,
+    API_ENDPOINTS.auth.refresh,
     {refreshToken: currentCredentials.refreshToken},
     {skipAuthRefresh: true} as RetriableConfig,
   );

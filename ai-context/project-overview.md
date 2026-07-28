@@ -92,8 +92,8 @@ Vietnamese `Intl` formatting.
 - Tailwind CSS v4 and semantic theme tokens are the project styling standard.
 - Yellow, near-black, purple, and a Vietnamese crane motif define the current visual direction.
 - The root `app/` App Router is retained; this project does not use `src/` or a top-level `features/` directory.
-- Shared Axios transport infrastructure lives in `lib/api/`; domain API services live in
-  `lib/feature/<domain>/api.ts`; shared API contracts live in `types/api.ts`.
+- Shared Axios transport infrastructure and the centralized external endpoint registry live in `lib/api/`; domain API
+  services live in `lib/feature/<domain>/api.ts`; shared API contracts live in `types/api.ts`.
 - Route-specific implementation is colocated in private `_components/` and `_hooks/` folders. Cross-route code lives
   in root shared folders.
 - The frontend and backend are expected to run over HTTP. The application preserves the configured HTTP scheme and

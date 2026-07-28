@@ -284,8 +284,8 @@ Client Component
   response metadata.
 - Components MUST NOT call Axios directly.
 - Slices and reducers MUST NOT call Axios.
-- Endpoints live in one shared endpoint module or the relevant domain API module; do not scatter raw path strings
-  through UI code.
+- All external endpoint constants and builders live in `lib/api/endpoints.ts`; do not declare raw API path strings in
+  domain services or UI code.
 - Convert Axios failures into a serializable application error:
 
 ```ts
