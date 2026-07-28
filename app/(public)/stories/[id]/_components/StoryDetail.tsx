@@ -10,16 +10,25 @@ import {CommentsThread} from '@/components/community/CommentsThread';
 import {ReactionBar} from '@/components/community/ReactionBar';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
+import {sanitizePostHtml, StoryContent} from './StoryContent';
+
 import type {Post} from '@/types/api';
+import type {SanitizedPostHtml} from './StoryContent';
+
+type RenderablePost = Omit<Post, 'content'> & {
+  content: SanitizedPostHtml;
+};
 
 export function StoryDetail({id}: Readonly<{id: string}>) {
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<RenderablePost | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     getPostService(id, controller.signal)
-      .then(setPost)
+      .then((nextPost) => {
+        setPost({...nextPost, content: sanitizePostHtml(nextPost.content)});
+      })
       .catch((loadError: unknown) => {
         if (!controller.signal.aborted) {
           setError(normalizeAppError(loadError).message);
@@ -44,7 +53,7 @@ export function StoryDetail({id}: Readonly<{id: string}>) {
         <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
         <span>{post.source === 'SYSTEM' ? 'Biên tập' : 'Cộng đồng'}</span>
       </div>
-      <div className='mt-10 whitespace-pre-wrap text-lg leading-9 text-ink/85'>{post.content}</div>
+      <StoryContent html={post.content} />
       <ReactionBar targetType='POST' targetId={post.id} initialCounts={post.reactionCounts} />
       <CommentsThread targetType='POST' targetId={post.id} />
     </article>

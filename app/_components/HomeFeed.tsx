@@ -100,7 +100,7 @@ export function HomeFeed() {
               >
                 <div>
                   <h3 className='font-display text-2xl font-semibold'>{post.title}</h3>
-                  <p className='mt-2 line-clamp-2 text-sm leading-6 text-muted'>{post.content}</p>
+                  <p className='mt-2 line-clamp-2 text-sm leading-6 text-muted'>{post.description}</p>
                 </div>
                 <p className='text-xs text-muted'>{formatDate(post.createdAt)}</p>
               </Link>

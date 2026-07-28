@@ -1,7 +1,10 @@
 services:
   web:
-    image: ${IMAGE_NAME:-nextjs-app}:${IMAGE_TAG:-latest}
-    container_name: nextjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${IMAGE_NAME:-travel-guide-fe}:${IMAGE_TAG:-latest}
+    container_name: travel-guide-fe
     restart: unless-stopped
     ports:
       - "3001:3000"

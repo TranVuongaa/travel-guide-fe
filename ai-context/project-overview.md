@@ -47,6 +47,8 @@ comments, and reactions. Editors manage destinations. Administrators manage user
   backend.
 - Public access: provinces, categories, published places/posts/reviews/comments, and reaction summaries. Province and
   place responses include ordered image metadata with source and license attribution fields.
+- Post responses include a required plain-text `description` for previews and a complete sanitized HTML `content`
+  article body. Post mutation requests use the same fields, with 500- and 100,000-character limits respectively.
 - Protected access: current/admin user reads, current-user posts/reviews, and all non-auth mutations.
 - Client UX roles: `ADMIN` for users/provinces/categories; `EDITOR|ADMIN` for places; authenticated ownership for
   community content. Backend authorization is authoritative.
@@ -117,4 +119,6 @@ Vietnamese `Intl` formatting.
   stable placeholders.
 - The API does not guarantee a narrow set of external image hosts, so remote entity images are loaded directly by the
   browser after HTTP(S) URL validation instead of through the Next.js image optimizer.
+- Rich post content is rendered only after a browser-side defense-in-depth allowlist pass, while the external backend
+  remains authoritative for sanitizing stored and returned HTML.
 - Privileged live verification still requires non-production `EDITOR` and `ADMIN` credentials.

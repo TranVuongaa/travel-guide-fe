@@ -110,6 +110,7 @@ export type Post = {
   authorId: string;
   placeId: string | null;
   title: string;
+  description: string;
   content: string;
   source: PostSource;
   status: ContentStatus;
@@ -225,6 +226,7 @@ export type UpdatePlaceInput = Partial<CreatePlaceInput>;
 
 export type CreatePostInput = {
   title: string;
+  description: string;
   content: string;
   placeId?: string;
   publicationIntent: PublicationIntent;
@@ -232,6 +234,7 @@ export type CreatePostInput = {
 
 export type UpdatePostInput = {
   title?: string;
+  description?: string;
   content?: string;
   placeId?: string | null;
   publicationIntent?: PublicationIntent;

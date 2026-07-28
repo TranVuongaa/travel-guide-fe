@@ -21,5 +21,5 @@ jobs:
             git pull origin main
             docker compose up -d --build
             sleep 5
-            docker compose ps | grep "Up" || (echo "Container not running!" && exit 1)
+            docker inspect -f '{{.State.Running}}' travel-guide-fe | grep true
             docker image prune -f

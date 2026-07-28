@@ -116,7 +116,7 @@ export function StoriesExplorer() {
                     {post.place?.name ?? 'Chuyện dọc đường'} · {post.author.displayName}
                   </p>
                   <h2 className='mt-3 font-display text-3xl font-semibold'>{post.title}</h2>
-                  <p className='mt-3 line-clamp-2 text-sm leading-6 text-muted'>{post.content}</p>
+                  <p className='mt-3 line-clamp-2 text-sm leading-6 text-muted'>{post.description}</p>
                 </div>
                 <div className='text-sm text-muted md:text-right'>
                   <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
