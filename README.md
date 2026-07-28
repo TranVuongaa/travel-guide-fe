@@ -1,54 +1,17 @@
-# Vạn Nẻo frontend
+# Vạn Nẻo — Travel Guide Frontend
 
-Frontend-only Next.js App Router application for the Vietnam Travel Guide API.
+Ứng dụng khám phá du lịch và cộng đồng dành cho người yêu những miền đất Việt Nam.
+Được xây dựng hoàn toàn ở phía frontend với Next.js App Router và kết nối tới API độc lập.
 
-## Local setup
+> [Khám phá bản demo](http://52.62.25.92) · [Xem tài liệu API](http://52.62.25.92/api/docs)
 
-```powershell
-Copy-Item .env.example .env.local
-npm install
-npm run dev
-```
+## Công nghệ chính
 
-Open `http://localhost:3000`. The confirmed API base URL is:
-
-```env
-NEXT_PUBLIC_API_BASE_URL=http://52.62.25.92
-```
-
-The application preserves HTTP and does not configure HSTS, an HTTPS redirect, or
-`upgrade-insecure-requests`. The backend must allow the frontend origin through CORS.
-
-## Google OAuth
-
-Google login and account linking remain unavailable until both variables are supplied:
-
-```env
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-browser-client-id
-NEXT_PUBLIC_GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
-```
-
-In Google Cloud Console:
-
-1. Create an OAuth 2.0 Web application client.
-2. Add the frontend origin, for example `http://localhost:3000`, to Authorized JavaScript origins.
-3. Add the exact callback URL to Authorized redirect URIs.
-4. Copy the client ID into `.env.local` and restart Next.js.
-
-The frontend uses Authorization Code with PKCE in a popup. No Google client secret belongs in this repository.
-
-## Checks
-
-```powershell
-npm run lint
-npm run typecheck
-npm test
-npm run build
-```
-
-## Security notes
-
-- Access and refresh tokens are held only in module memory.
-- Reloading the page intentionally ends the local session.
-- Route guards are UX only; the external API remains the authorization authority.
-- Apple login and Apple account linking are not implemented.
+| Công nghệ | Vai trò |
+| --- | --- |
+| Next.js 16 + React 19 | Giao diện và định tuyến App Router |
+| TypeScript | Kiểm tra kiểu dữ liệu nghiêm ngặt |
+| Tailwind CSS 4 | Hệ thống giao diện và responsive |
+| Redux Toolkit | Trạng thái dùng chung phía client |
+| Axios | Kết nối tới API bên ngoài |
+| Vitest + Testing Library | Unit test và component test |
