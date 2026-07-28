@@ -5,20 +5,22 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
+import {useDebouncedSearchParam} from '@/hooks/useDebouncedSearchParam';
 import {normalizeAppError} from '@/lib/api/errors';
-import {listPlacesService} from '@/lib/api/places';
-import {listPostsService} from '@/lib/api/posts';
+import {listPlacesService} from '@/lib/feature/places/api';
+import {listPostsService} from '@/lib/feature/posts/api';
 import {formatDate, formatNumber} from '@/utils/format';
 
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {PaginatedData, Place, Post, PostSource} from '@/lib/api/contracts';
+import type {PaginatedData, Place, Post, PostSource} from '@/types/api';
 
 const EMPTY_PAGE: PaginatedData<Post> = {items: [], page: 1, limit: 20, totalItems: 0, totalPages: 0};
 
 export function StoriesExplorer() {
   const searchParams = useSearchParams();
+  const {search, setSearch} = useDebouncedSearchParam();
   const query = searchParams.toString();
   const [data, setData] = useState(EMPTY_PAGE);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -71,7 +73,14 @@ export function StoriesExplorer() {
       <form action={routes.stories} className='mb-8 grid gap-4 rounded-panel bg-surface p-5 md:grid-cols-4'>
         <div className='md:col-span-2'>
           <label className='field-label' htmlFor='story-search'>Tìm kiếm</label>
-          <input id='story-search' name='search' defaultValue={searchParams.get('search') ?? ''} className='field-control' placeholder='Tiêu đề hoặc nội dung' />
+          <input
+            id='story-search'
+            name='search'
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className='field-control'
+            placeholder='Tiêu đề hoặc nội dung'
+          />
         </div>
         <div>
           <label className='field-label' htmlFor='story-place'>Điểm đến</label>

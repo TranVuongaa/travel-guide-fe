@@ -20,7 +20,8 @@ Keywords:
 - Do not add Route Handlers under `app/api`.
 - Do not add Server Actions or files marked with `'use server'`.
 - Do not add database clients, ORM schemas, queues, webhooks, cron jobs, or backend business logic.
-- Application API requests MUST go through the shared Axios client and domain API service modules under `lib/api/`.
+- Application API requests MUST go through the shared Axios client under `lib/api/` and domain API service modules
+  under `lib/feature/<domain>/`.
 - Dynamic external API requests MUST originate from Client Components, client Hooks, or Redux thunks.
 - Server Components MAY render static/local content and compose the page shell, but MUST NOT call the application API.
 - If a feature requires a server-only credential, signed request, webhook, or privileged operation, record it as a
@@ -278,7 +279,7 @@ Client Component
 
 ### Services and errors
 
-- Domain API service modules under `lib/api/` are the only modules that call the shared Axios client.
+- Domain API service modules under `lib/feature/<domain>/` are the only modules that call the shared Axios client.
 - Services define request/response types and return domain data, not raw Axios responses, unless the contract requires
   response metadata.
 - Components MUST NOT call Axios directly.

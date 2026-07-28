@@ -1,4 +1,4 @@
-import type {ContentStatus, ReactionType, UserRole} from '@/lib/api/contracts';
+import type {ContentStatus, ReactionType, UserRole} from '@/types/api';
 
 export const formatDate = (value: string): string =>
   new Intl.DateTimeFormat('vi-VN', {

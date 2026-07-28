@@ -2,7 +2,7 @@ import {describe, expect, it} from 'vitest';
 
 import {authReducer, login, sessionCleared, userChanged} from './auth.slice';
 
-import type {User} from '@/lib/api/contracts';
+import type {User} from '@/types/api';
 
 const USER: User = {
   id: 'user-1',

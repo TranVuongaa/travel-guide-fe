@@ -1,10 +1,10 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import {googleLoginService, loginService, registerService} from '@/lib/api/auth';
+import {googleLoginService, loginService, registerService} from '@/lib/feature/auth/api';
 import {normalizeAppError} from '@/lib/api/errors';
 
 import type {AppError} from '@/lib/api/errors';
-import type {LoginInput, OAuthCodeInput, RegisterInput, User} from '@/lib/api/contracts';
+import type {LoginInput, OAuthCodeInput, RegisterInput, User} from '@/types/api';
 
 type AuthState = {
   user: User | null;

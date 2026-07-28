@@ -5,20 +5,20 @@ import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
 import {normalizeAppError} from '@/lib/api/errors';
-import {listPlacesService} from '@/lib/api/places';
+import {listPlacesService} from '@/lib/feature/places/api';
 import {
   deleteReviewService,
   getReviewService,
   listMyReviewsService,
   updateReviewService,
-} from '@/lib/api/reviews';
+} from '@/lib/feature/reviews/api';
 import {CONTENT_STATUS_LABELS, formatDate} from '@/utils/format';
 
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {ContentStatus, PaginatedData, Place, Review} from '@/lib/api/contracts';
+import type {ContentStatus, PaginatedData, Place, Review} from '@/types/api';
 
 const EMPTY_PAGE: PaginatedData<Review> = {items: [], page: 1, limit: 20, totalItems: 0, totalPages: 0};
 const STATUSES: ContentStatus[] = ['DRAFT', 'PENDING', 'PUBLISHED', 'REJECTED', 'HIDDEN'];

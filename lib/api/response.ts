@@ -1,6 +1,6 @@
 import {createContractError} from '@/lib/api/errors';
 
-import type {ApiSuccess} from '@/lib/api/contracts';
+import type {ApiSuccess} from '@/types/api';
 
 export const unwrapApiSuccess = <T>(value: unknown): T => {
   if (

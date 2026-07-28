@@ -9,12 +9,12 @@ import {
   deleteReactionService,
   getReactionSummaryService,
   upsertReactionService,
-} from '@/lib/api/reactions';
+} from '@/lib/feature/reactions/api';
 import {selectCurrentUser} from '@/store/selectors';
 import {useAppSelector} from '@/store/hooks';
 import {REACTION_ICONS, REACTION_LABELS} from '@/utils/format';
 
-import type {ReactionSummary, ReactionType, TargetType} from '@/lib/api/contracts';
+import type {ReactionSummary, ReactionType, TargetType} from '@/types/api';
 
 const REACTION_TYPES: ReactionType[] = ['LIKE', 'LOVE', 'WOW', 'SAD', 'ANGRY'];
 

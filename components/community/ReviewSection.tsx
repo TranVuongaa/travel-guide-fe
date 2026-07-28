@@ -11,7 +11,7 @@ import {
   getReviewService,
   listPlaceReviewsService,
   updateReviewService,
-} from '@/lib/api/reviews';
+} from '@/lib/feature/reviews/api';
 import {selectCurrentUser} from '@/store/selectors';
 import {useAppSelector} from '@/store/hooks';
 import {formatDate} from '@/utils/format';
@@ -19,7 +19,7 @@ import {formatDate} from '@/utils/format';
 import {CommentsThread} from './CommentsThread';
 import {ReactionBar} from './ReactionBar';
 
-import type {Review} from '@/lib/api/contracts';
+import type {Review} from '@/types/api';
 
 export function ReviewSection({placeId}: Readonly<{placeId: string}>) {
   const user = useAppSelector(selectCurrentUser);

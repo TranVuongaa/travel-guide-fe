@@ -1,5 +1,4 @@
 import {apiClient} from '@/lib/api/client';
-import {endpoints} from '@/lib/api/endpoints';
 import {unwrapApiSuccess} from '@/lib/api/response';
 
 import type {
@@ -9,14 +8,19 @@ import type {
   ReactionSummary,
   TargetType,
   UpsertReactionInput,
-} from '@/lib/api/contracts';
+} from '@/types/api';
+
+const endpoints = {
+  all: '/api/v1/reactions',
+  summary: '/api/v1/reactions/summary',
+} as const;
 
 export const getReactionSummaryService = async (
   targetType: TargetType,
   targetId: string,
   signal?: AbortSignal,
 ): Promise<ReactionSummary> => {
-  const response = await apiClient.get<ApiSuccess<ReactionSummary>>(endpoints.reactions.summary, {
+  const response = await apiClient.get<ApiSuccess<ReactionSummary>>(endpoints.summary, {
     params: {targetType, targetId},
     signal,
   });
@@ -24,12 +28,12 @@ export const getReactionSummaryService = async (
 };
 
 export const upsertReactionService = async (input: UpsertReactionInput): Promise<ReactionMutation> => {
-  const response = await apiClient.post<ApiSuccess<ReactionMutation>>(endpoints.reactions.all, input);
+  const response = await apiClient.post<ApiSuccess<ReactionMutation>>(endpoints.all, input);
   return unwrapApiSuccess<ReactionMutation>(response.data);
 };
 
 export const deleteReactionService = async (targetType: TargetType, targetId: string): Promise<Reaction> => {
-  const response = await apiClient.delete<ApiSuccess<Reaction>>(endpoints.reactions.all, {
+  const response = await apiClient.delete<ApiSuccess<Reaction>>(endpoints.all, {
     params: {targetType, targetId},
   });
   return unwrapApiSuccess<Reaction>(response.data);

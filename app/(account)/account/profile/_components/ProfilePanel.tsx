@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 
 import {isGoogleOAuthConfigured} from '@/config/env';
 import {routes} from '@/config/routes';
-import {logoutAllService, logoutService} from '@/lib/api/auth';
+import {logoutAllService, logoutService} from '@/lib/feature/auth/api';
 import {normalizeAppError} from '@/lib/api/errors';
 import {
   changePasswordService,
@@ -13,7 +13,7 @@ import {
   linkGoogleService,
   unlinkOAuthProviderService,
   updateCurrentUserService,
-} from '@/lib/api/users';
+} from '@/lib/feature/users/api';
 import {openGoogleOAuthPopup} from '@/lib/auth/google-pkce';
 import {selectCurrentUser} from '@/store/selectors';
 import {userChanged} from '@/store/slices/auth.slice';

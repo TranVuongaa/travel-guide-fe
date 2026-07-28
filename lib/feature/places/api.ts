@@ -1,5 +1,4 @@
 import {apiClient} from '@/lib/api/client';
-import {endpoints} from '@/lib/api/endpoints';
 import {unwrapApiSuccess} from '@/lib/api/response';
 
 import type {
@@ -9,7 +8,12 @@ import type {
   PaginationParams,
   Place,
   UpdatePlaceInput,
-} from '@/lib/api/contracts';
+} from '@/types/api';
+
+const endpoints = {
+  all: '/api/v1/places',
+  one: (id: string) => `/api/v1/places/${encodeURIComponent(id)}`,
+} as const;
 
 export type PlaceListParams = PaginationParams & {
   search?: string;
@@ -22,26 +26,26 @@ export const listPlacesService = async (
   params: PlaceListParams = {},
   signal?: AbortSignal,
 ): Promise<PaginatedData<Place>> => {
-  const response = await apiClient.get<ApiSuccess<PaginatedData<Place>>>(endpoints.places.all, {params, signal});
+  const response = await apiClient.get<ApiSuccess<PaginatedData<Place>>>(endpoints.all, {params, signal});
   return unwrapApiSuccess<PaginatedData<Place>>(response.data);
 };
 
 export const getPlaceService = async (id: string, signal?: AbortSignal): Promise<Place> => {
-  const response = await apiClient.get<ApiSuccess<Place>>(endpoints.places.one(id), {signal});
+  const response = await apiClient.get<ApiSuccess<Place>>(endpoints.one(id), {signal});
   return unwrapApiSuccess<Place>(response.data);
 };
 
 export const createPlaceService = async (input: CreatePlaceInput): Promise<Place> => {
-  const response = await apiClient.post<ApiSuccess<Place>>(endpoints.places.all, input);
+  const response = await apiClient.post<ApiSuccess<Place>>(endpoints.all, input);
   return unwrapApiSuccess<Place>(response.data);
 };
 
 export const updatePlaceService = async (id: string, input: UpdatePlaceInput): Promise<Place> => {
-  const response = await apiClient.patch<ApiSuccess<Place>>(endpoints.places.one(id), input);
+  const response = await apiClient.patch<ApiSuccess<Place>>(endpoints.one(id), input);
   return unwrapApiSuccess<Place>(response.data);
 };
 
 export const deletePlaceService = async (id: string): Promise<Place> => {
-  const response = await apiClient.delete<ApiSuccess<Place>>(endpoints.places.one(id));
+  const response = await apiClient.delete<ApiSuccess<Place>>(endpoints.one(id));
   return unwrapApiSuccess<Place>(response.data);
 };

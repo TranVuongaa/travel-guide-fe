@@ -7,7 +7,7 @@ import {selectCurrentUser} from '@/store/selectors';
 import {useAppSelector} from '@/store/hooks';
 import {USER_ROLE_LABELS} from '@/utils/format';
 
-import type {UserRole} from '@/lib/api/contracts';
+import type {UserRole} from '@/types/api';
 
 export function AuthGuard({
   children,

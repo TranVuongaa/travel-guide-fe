@@ -4,26 +4,28 @@ import {useCallback, useEffect, useState} from 'react';
 import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
+import {useDebouncedSearchParam} from '@/hooks/useDebouncedSearchParam';
 import {normalizeAppError} from '@/lib/api/errors';
 import {
   getUserService,
   listUsersService,
   updateUserRoleService,
   updateUserStatusService,
-} from '@/lib/api/users';
+} from '@/lib/feature/users/api';
 import {formatDate, USER_ROLE_LABELS} from '@/utils/format';
 
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {PaginatedData, User, UserRole} from '@/lib/api/contracts';
+import type {PaginatedData, User, UserRole} from '@/types/api';
 
 const EMPTY_PAGE: PaginatedData<User> = {items: [], page: 1, limit: 20, totalItems: 0, totalPages: 0};
 const ROLES: UserRole[] = ['USER', 'EDITOR', 'ADMIN'];
 
 export function UsersAdmin() {
   const searchParams = useSearchParams();
+  const {search, setSearch} = useDebouncedSearchParam();
   const query = searchParams.toString();
   const [data, setData] = useState(EMPTY_PAGE);
   const [selected, setSelected] = useState<User | null>(null);
@@ -108,7 +110,14 @@ export function UsersAdmin() {
       <form action={routes.adminUsers} className='my-7 grid gap-4 rounded-2xl bg-surface p-4 md:grid-cols-4'>
         <div className='md:col-span-2'>
           <label className='field-label' htmlFor='user-search'>Tìm kiếm</label>
-          <input id='user-search' name='search' defaultValue={searchParams.get('search') ?? ''} className='field-control' placeholder='Email hoặc tên' />
+          <input
+            id='user-search'
+            name='search'
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className='field-control'
+            placeholder='Email hoặc tên'
+          />
         </div>
         <div>
           <label className='field-label' htmlFor='user-role'>Vai trò</label>

@@ -1,6 +1,6 @@
 import {env, isGoogleOAuthConfigured} from '@/config/env';
 
-import type {OAuthCodeInput} from '@/lib/api/contracts';
+import type {OAuthCodeInput} from '@/types/api';
 
 const OAUTH_MESSAGE_TYPE = 'vanno-google-oauth';
 

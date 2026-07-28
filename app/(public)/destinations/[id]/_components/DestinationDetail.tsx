@@ -3,12 +3,12 @@
 import {useEffect, useState} from 'react';
 
 import {normalizeAppError} from '@/lib/api/errors';
-import {getPlaceService} from '@/lib/api/places';
+import {getPlaceService} from '@/lib/feature/places/api';
 
 import {ReviewSection} from '@/components/community/ReviewSection';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
-import type {Place} from '@/lib/api/contracts';
+import type {Place} from '@/types/api';
 
 export function DestinationDetail({id}: Readonly<{id: string}>) {
   const [place, setPlace] = useState<Place | null>(null);

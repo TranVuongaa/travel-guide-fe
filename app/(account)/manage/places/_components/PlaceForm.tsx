@@ -4,12 +4,12 @@ import {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 import {routes} from '@/config/routes';
-import {listCategoriesService} from '@/lib/api/categories';
+import {listCategoriesService} from '@/lib/feature/categories/api';
 import {normalizeAppError} from '@/lib/api/errors';
-import {createPlaceService, getPlaceService, updatePlaceService} from '@/lib/api/places';
-import {listProvincesService} from '@/lib/api/provinces';
+import {createPlaceService, getPlaceService, updatePlaceService} from '@/lib/feature/places/api';
+import {listProvincesService} from '@/lib/feature/provinces/api';
 
-import type {Category, Province} from '@/lib/api/contracts';
+import type {Category, Province} from '@/types/api';
 
 export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
   const router = useRouter();

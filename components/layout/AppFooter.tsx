@@ -22,9 +22,6 @@ export function AppFooter() {
           <Link href={routes.stories} className='hover:text-ink focus-visible:text-ink'>
             Câu chuyện
           </Link>
-          <Link href={routes.status} className='hover:text-ink focus-visible:text-ink'>
-            API
-          </Link>
         </div>
       </div>
     </footer>

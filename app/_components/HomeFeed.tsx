@@ -5,11 +5,11 @@ import Link from 'next/link';
 
 import {routes} from '@/config/routes';
 import {normalizeAppError} from '@/lib/api/errors';
-import {listPlacesService} from '@/lib/api/places';
-import {listPostsService} from '@/lib/api/posts';
+import {listPlacesService} from '@/lib/feature/places/api';
+import {listPostsService} from '@/lib/feature/posts/api';
 import {formatDate} from '@/utils/format';
 
-import type {Place, Post} from '@/lib/api/contracts';
+import type {Place, Post} from '@/types/api';
 
 export function HomeFeed() {
   const [places, setPlaces] = useState<Place[]>([]);

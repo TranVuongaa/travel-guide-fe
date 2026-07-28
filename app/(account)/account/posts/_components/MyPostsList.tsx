@@ -6,14 +6,14 @@ import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
 import {normalizeAppError} from '@/lib/api/errors';
-import {deletePostService, listMyPostsService} from '@/lib/api/posts';
+import {deletePostService, listMyPostsService} from '@/lib/feature/posts/api';
 import {CONTENT_STATUS_LABELS, formatDate} from '@/utils/format';
 
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {ContentStatus, PaginatedData, Post} from '@/lib/api/contracts';
+import type {ContentStatus, PaginatedData, Post} from '@/types/api';
 
 const EMPTY_PAGE: PaginatedData<Post> = {items: [], page: 1, limit: 20, totalItems: 0, totalPages: 0};
 const STATUSES: ContentStatus[] = ['DRAFT', 'PENDING', 'PUBLISHED', 'REJECTED', 'HIDDEN'];

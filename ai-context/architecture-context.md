@@ -55,9 +55,13 @@ project/
 ├── config/
 │   ├── env.ts
 │   └── routes.ts
+├── hooks/
+│   ├── useDebounce.ts
+│   └── useDebouncedSearchParam.ts
 ├── lib/
 │   ├── api/
-│   └── auth/
+│   ├── auth/
+│   └── feature/
 ├── store/
 │   ├── slices/
 │   ├── hooks.ts
@@ -78,7 +82,8 @@ project/
 - `app/`: Routes, layouts, metadata, route boundaries, and route-colocated private implementation.
 - `components/`: Components reused across unrelated routes.
 - `config/`: Validated public configuration and safe route builders.
-- `lib/`: Shared non-visual infrastructure, external API services, and authentication plumbing.
+- `hooks/`: Domain-neutral client Hooks reused across unrelated routes.
+- `lib/`: Shared non-visual infrastructure, domain API services, and authentication plumbing.
 - `store/`: The single Redux store, typed hooks, and slices for genuinely shared client state.
 - `types/`: Types used by multiple unrelated modules.
 - `utils/`: Small domain-neutral pure functions.
@@ -184,28 +189,32 @@ components/
 ## API infrastructure and domain services
 
 ```text
-lib/api/
-├── client.ts
-├── endpoints.ts
-├── errors.ts
-├── contracts.ts
-├── auth.ts
-├── users.ts
-├── provinces.ts
-├── categories.ts
-├── places.ts
-├── posts.ts
-├── reviews.ts
-├── comments.ts
-└── reactions.ts
+lib/
+├── api/
+│   ├── client.ts
+│   ├── errors.ts
+│   └── response.ts
+└── feature/
+    ├── auth/api.ts
+    ├── users/api.ts
+    ├── provinces/api.ts
+    ├── categories/api.ts
+    ├── places/api.ts
+    ├── posts/api.ts
+    ├── reviews/api.ts
+    ├── comments/api.ts
+    └── reactions/api.ts
+
+types/
+└── api.ts
 ```
 
-- `client.ts`: The one shared Axios instance, safe defaults, and interceptors.
-- `endpoints.ts`: Central endpoint constants and builders when they improve safety.
-- `errors.ts`: Converts unknown Axios failures into serializable application errors.
-- `contracts.ts`: Shared response envelopes, pagination, enums, and cross-domain API shapes.
-- Domain-named modules define typed request/response contracts and service functions for their API area.
-- Split a domain module only when its size or responsibilities justify a domain subfolder.
+- `lib/api/client.ts`: The one shared Axios instance, safe defaults, and interceptors.
+- `lib/api/errors.ts`: Converts unknown Axios failures into serializable application errors.
+- `lib/api/response.ts`: Narrows shared API response envelopes.
+- `lib/feature/<domain>/api.ts`: Colocates endpoint constants and typed service functions for one API domain.
+- `types/api.ts`: Shared response envelopes, pagination, enums, request contracts, and cross-domain API shapes.
+- Split a domain API module only when its size or responsibilities justify additional files in the same domain folder.
 - Components and Hooks never call Axios directly.
 - The shared client does not import UI, routing, or the Redux store.
 - Domain service modules do not render UI, dispatch Redux actions, or navigate.
@@ -218,7 +227,7 @@ Example:
 ```ts
 import {apiClient} from '@/lib/api/client';
 
-import type {ApiSuccess, User} from '@/lib/api/contracts';
+import type {ApiSuccess, User} from '@/types/api';
 
 export const getCurrentUserService = async (): Promise<User> => {
   const response = await apiClient.get<ApiSuccess<User>>('/api/v1/users/me');
@@ -321,10 +330,11 @@ localization dependency until the project overview confirms it.
 
 ## Utilities and shared types
 
+- Root `hooks/` contains domain-neutral client Hooks reused by unrelated routes.
 - Root `utils/` contains only small domain-neutral pure functions reused by unrelated routes.
 - Root `types/` contains only types shared by unrelated modules.
 - Route-specific helpers and types stay in a private folder beside the owning route.
-- API contract types stay in `lib/api/`.
+- API contract types shared across domains stay in `types/api.ts`.
 - Do not create broad `helpers.ts`, `utils.ts`, or `types.ts` dumping grounds.
 - Browser storage wrappers, if approved, belong in a clearly named browser-only module.
 
@@ -368,7 +378,7 @@ Rules:
 | Slice | dot suffix | `auth.slice.ts` |
 | Selector | dot suffix | `auth.selectors.ts` |
 | Thunk | dot suffix | `auth.thunks.ts` |
-| Domain API module | lowercase domain | `places.ts` |
+| Domain API module | domain folder with `api.ts` | `lib/feature/places/api.ts` |
 | Utility | camelCase | `formatDate.ts` |
 | CSS Module | matching owner | `ProfileCard.module.css` |
 | Public asset | lowercase kebab-case | `empty-state.svg` |
@@ -390,7 +400,8 @@ migration. Application modules not represented in the table still use `.ts` with
 ## Adding an API flow
 
 1. Obtain the confirmed external API contract.
-2. Add or update request and response types in `lib/api/contracts.ts` or the relevant domain API module.
+2. Add or update shared request and response types in `types/api.ts`, or domain-local types in the relevant feature
+   API module.
 3. Add the endpoint constant or builder if needed.
 4. Add a typed service function to the relevant domain API module using the shared Axios client.
 5. Normalize the response and errors.
@@ -400,7 +411,7 @@ migration. Application modules not represented in the table still use `.ts` with
 
 ```text
 External API contract
-  -> lib/api/profile.ts
+  -> lib/feature/profile/api.ts
     -> route-private Hook or shared auth thunk
       -> Client Component
 ```

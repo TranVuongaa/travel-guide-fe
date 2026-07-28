@@ -1,9 +1,17 @@
 import {apiClient} from '@/lib/api/client';
-import {endpoints} from '@/lib/api/endpoints';
 import {unwrapApiSuccess} from '@/lib/api/response';
 import {clearCredentials, getCredentials, setCredentials} from '@/lib/auth/credentials';
 
-import type {ApiSuccess, AuthResponse, LoginInput, OAuthCodeInput, RegisterInput} from '@/lib/api/contracts';
+import type {ApiSuccess, AuthResponse, LoginInput, OAuthCodeInput, RegisterInput} from '@/types/api';
+
+const endpoints = {
+  register: '/api/v1/auth/register',
+  login: '/api/v1/auth/login',
+  google: '/api/v1/auth/oauth/google',
+  refresh: '/api/v1/auth/refresh',
+  logout: '/api/v1/auth/logout',
+  logoutAll: '/api/v1/auth/logout-all',
+} as const;
 
 const acceptAuthResponse = (value: unknown): AuthResponse => {
   const auth = unwrapApiSuccess<AuthResponse>(value);
@@ -12,21 +20,21 @@ const acceptAuthResponse = (value: unknown): AuthResponse => {
 };
 
 export const registerService = async (input: RegisterInput): Promise<AuthResponse> => {
-  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.auth.register, input, {
+  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.register, input, {
     skipAuthRefresh: true,
   });
   return acceptAuthResponse(response.data);
 };
 
 export const loginService = async (input: LoginInput): Promise<AuthResponse> => {
-  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.auth.login, input, {
+  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.login, input, {
     skipAuthRefresh: true,
   });
   return acceptAuthResponse(response.data);
 };
 
 export const googleLoginService = async (input: OAuthCodeInput): Promise<AuthResponse> => {
-  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.auth.google, input, {
+  const response = await apiClient.post<ApiSuccess<AuthResponse>>(endpoints.google, input, {
     skipAuthRefresh: true,
   });
   return acceptAuthResponse(response.data);
@@ -39,7 +47,7 @@ export const refreshSessionService = async (): Promise<AuthResponse> => {
   }
 
   const response = await apiClient.post<ApiSuccess<AuthResponse>>(
-    endpoints.auth.refresh,
+    endpoints.refresh,
     {refreshToken},
     {skipAuthRefresh: true},
   );
@@ -50,7 +58,7 @@ export const logoutService = async (): Promise<void> => {
   const refreshToken = getCredentials()?.refreshToken;
   try {
     if (refreshToken) {
-      await apiClient.post(endpoints.auth.logout, {refreshToken}, {skipAuthRefresh: true});
+      await apiClient.post(endpoints.logout, {refreshToken}, {skipAuthRefresh: true});
     }
   } finally {
     clearCredentials();
@@ -59,7 +67,7 @@ export const logoutService = async (): Promise<void> => {
 
 export const logoutAllService = async (): Promise<void> => {
   try {
-    await apiClient.post(endpoints.auth.logoutAll);
+    await apiClient.post(endpoints.logoutAll);
   } finally {
     clearCredentials();
   }

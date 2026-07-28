@@ -18,7 +18,6 @@ comments, and reactions. Editors manage destinations. Administrators manage user
 5. A member creates, edits, or soft-deletes owned comments and changes or removes reactions.
 6. An `EDITOR` or `ADMIN` creates, updates, and soft-removes destinations.
 7. An `ADMIN` manages users, roles, active status, provinces, and categories.
-8. A visitor checks external API availability from the status page.
 
 ## Route Map
 
@@ -29,7 +28,6 @@ comments, and reactions. Editors manage destinations. Administrators manage user
 - `/stories/[id]`: Public story detail, comments, replies, and reactions.
 - `/login`, `/register`: Email authentication and optional Google login.
 - `/auth/google/callback`: Same-origin Google PKCE popup callback.
-- `/status`: Public external API health check.
 - `/account/profile`: Authenticated profile, password, OAuth links, and session controls.
 - `/account/posts`, `/account/posts/new`, `/account/posts/[id]/edit`: Current-user post management.
 - `/account/reviews`: Current-user review management.
@@ -47,7 +45,7 @@ comments, and reactions. Editors manage destinations. Administrators manage user
 - API contract source: OpenAPI 3.0 at `http://52.62.25.92/api/docs-json` (`Vietnam Travel Guide API` v1.0).
 - Browser origins/CORS: `http://localhost:3000` is confirmed. Other HTTP deployment origins must be allowed by the
   backend.
-- Public access: health, provinces, categories, published places/posts/reviews/comments, and reaction summaries.
+- Public access: provinces, categories, published places/posts/reviews/comments, and reaction summaries.
 - Protected access: current/admin user reads, current-user posts/reviews, and all non-auth mutations.
 - Client UX roles: `ADMIN` for users/provinces/categories; `EDITOR|ADMIN` for places; authenticated ownership for
   community content. Backend authorization is authoritative.
@@ -94,6 +92,8 @@ Vietnamese `Intl` formatting.
 - Tailwind CSS v4 and semantic theme tokens are the project styling standard.
 - Yellow, near-black, purple, and a Vietnamese crane motif define the current visual direction.
 - The root `app/` App Router is retained; this project does not use `src/` or a top-level `features/` directory.
+- Shared Axios transport infrastructure lives in `lib/api/`; domain API services live in
+  `lib/feature/<domain>/api.ts`; shared API contracts live in `types/api.ts`.
 - Route-specific implementation is colocated in private `_components/` and `_hooks/` folders. Cross-route code lives
   in root shared folders.
 - The frontend and backend are expected to run over HTTP. The application preserves the configured HTTP scheme and

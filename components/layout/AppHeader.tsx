@@ -11,7 +11,6 @@ import {BrandMark} from './BrandMark';
 const publicLinks = [
   {href: routes.destinations, label: 'Điểm đến'},
   {href: routes.stories, label: 'Câu chuyện'},
-  {href: routes.status, label: 'Trạng thái API'},
 ];
 
 export function AppHeader() {
@@ -33,7 +32,10 @@ export function AppHeader() {
           </span>
         </Link>
 
-        <nav aria-label='Điều hướng chính' className='order-3 flex w-full gap-2 overflow-x-auto pb-1 md:order-none md:w-auto'>
+        <nav
+          aria-label='Điều hướng chính'
+          className='order-3 flex w-full gap-2 overflow-x-auto px-0.5 pt-0.5 pb-1 md:order-none md:w-auto'
+        >
           {publicLinks.map((link) => (
             <Link key={link.href} href={link.href} className='app-nav-link'>
               {link.label}

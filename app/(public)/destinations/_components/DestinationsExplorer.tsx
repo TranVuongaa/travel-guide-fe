@@ -5,21 +5,23 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
-import {listCategoriesService} from '@/lib/api/categories';
+import {useDebouncedSearchParam} from '@/hooks/useDebouncedSearchParam';
+import {listCategoriesService} from '@/lib/feature/categories/api';
 import {normalizeAppError} from '@/lib/api/errors';
-import {listPlacesService} from '@/lib/api/places';
-import {listProvincesService} from '@/lib/api/provinces';
+import {listPlacesService} from '@/lib/feature/places/api';
+import {listProvincesService} from '@/lib/feature/provinces/api';
 import {formatNumber} from '@/utils/format';
 
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {Category, PaginatedData, Place, Province, SortOrder} from '@/lib/api/contracts';
+import type {Category, PaginatedData, Place, Province, SortOrder} from '@/types/api';
 
 const EMPTY_PAGE: PaginatedData<Place> = {items: [], page: 1, limit: 20, totalItems: 0, totalPages: 0};
 
 export function DestinationsExplorer() {
   const searchParams = useSearchParams();
+  const {search, setSearch} = useDebouncedSearchParam();
   const [data, setData] = useState(EMPTY_PAGE);
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -76,7 +78,14 @@ export function DestinationsExplorer() {
       <form action={routes.destinations} className='mb-8 grid gap-4 rounded-panel bg-surface p-5 md:grid-cols-5'>
         <div className='md:col-span-2'>
           <label className='field-label' htmlFor='place-search'>Tìm kiếm</label>
-          <input id='place-search' name='search' defaultValue={searchParams.get('search') ?? ''} className='field-control' placeholder='Tên hoặc mô tả' />
+          <input
+            id='place-search'
+            name='search'
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className='field-control'
+            placeholder='Tên hoặc mô tả'
+          />
         </div>
         <div>
           <label className='field-label' htmlFor='province-filter'>Tỉnh thành</label>

@@ -6,7 +6,6 @@ export const routes = {
   story: (id: string) => `/stories/${encodeURIComponent(id)}`,
   login: '/login',
   register: '/register',
-  status: '/status',
   profile: '/account/profile',
   accountPosts: '/account/posts',
   newPost: '/account/posts/new',

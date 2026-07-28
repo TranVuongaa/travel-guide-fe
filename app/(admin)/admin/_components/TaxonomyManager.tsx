@@ -4,13 +4,14 @@ import {useCallback, useEffect, useState} from 'react';
 import {useSearchParams} from 'next/navigation';
 
 import {routes} from '@/config/routes';
+import {useDebouncedSearchParam} from '@/hooks/useDebouncedSearchParam';
 import {
   createCategoryService,
   deleteCategoryService,
   getCategoryService,
   listCategoriesService,
   updateCategoryService,
-} from '@/lib/api/categories';
+} from '@/lib/feature/categories/api';
 import {normalizeAppError} from '@/lib/api/errors';
 import {
   createProvinceService,
@@ -18,13 +19,13 @@ import {
   getProvinceService,
   listProvincesService,
   updateProvinceService,
-} from '@/lib/api/provinces';
+} from '@/lib/feature/provinces/api';
 
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {Pagination} from '@/components/ui/Pagination';
 
-import type {Category, PaginatedData, Province} from '@/lib/api/contracts';
+import type {Category, PaginatedData, Province} from '@/types/api';
 
 type TaxonomyItem = Province | Category;
 type Kind = 'province' | 'category';
@@ -49,6 +50,7 @@ const config = {
 
 export function TaxonomyManager({kind}: Readonly<{kind: Kind}>) {
   const searchParams = useSearchParams();
+  const {search, setSearch} = useDebouncedSearchParam();
   const query = searchParams.toString();
   const copy = config[kind];
   const [data, setData] = useState<PaginatedData<TaxonomyItem>>(EMPTY_PAGE);
@@ -161,7 +163,13 @@ export function TaxonomyManager({kind}: Readonly<{kind: Kind}>) {
       <form action={copy.route} className='mt-7 flex flex-wrap items-end gap-3'>
         <div className='min-w-64 flex-1'>
           <label className='field-label' htmlFor={`${kind}-search`}>Tìm kiếm</label>
-          <input id={`${kind}-search`} name='search' defaultValue={searchParams.get('search') ?? ''} className='field-control' />
+          <input
+            id={`${kind}-search`}
+            name='search'
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className='field-control'
+          />
         </div>
         <button type='submit' className='button-secondary'>Tìm</button>
       </form>

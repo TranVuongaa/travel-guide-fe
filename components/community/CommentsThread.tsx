@@ -10,7 +10,7 @@ import {
   getCommentService,
   listCommentsService,
   updateCommentService,
-} from '@/lib/api/comments';
+} from '@/lib/feature/comments/api';
 import {normalizeAppError} from '@/lib/api/errors';
 import {selectCurrentUser} from '@/store/selectors';
 import {useAppSelector} from '@/store/hooks';
@@ -18,7 +18,7 @@ import {formatDate} from '@/utils/format';
 
 import {ReactionBar} from './ReactionBar';
 
-import type {Comment, CommentTargetType} from '@/lib/api/contracts';
+import type {Comment, CommentTargetType} from '@/types/api';
 
 function ReplyList({
   targetType,

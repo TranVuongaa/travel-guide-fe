@@ -3,14 +3,14 @@
 import {useEffect, useState} from 'react';
 
 import {normalizeAppError} from '@/lib/api/errors';
-import {getPostService} from '@/lib/api/posts';
+import {getPostService} from '@/lib/feature/posts/api';
 import {formatDate} from '@/utils/format';
 
 import {CommentsThread} from '@/components/community/CommentsThread';
 import {ReactionBar} from '@/components/community/ReactionBar';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
-import type {Post} from '@/lib/api/contracts';
+import type {Post} from '@/types/api';
 
 export function StoryDetail({id}: Readonly<{id: string}>) {
   const [post, setPost] = useState<Post | null>(null);

@@ -5,14 +5,14 @@ import Link from 'next/link';
 
 import {routes} from '@/config/routes';
 import {normalizeAppError} from '@/lib/api/errors';
-import {deletePlaceService, listPlacesService} from '@/lib/api/places';
+import {deletePlaceService, listPlacesService} from '@/lib/feature/places/api';
 import {CONTENT_STATUS_LABELS} from '@/utils/format';
 
 import {AuthGuard} from '@/components/auth/AuthGuard';
 import {ConfirmButton} from '@/components/ui/ConfirmButton';
 import {EmptyState, ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
-import type {Place} from '@/lib/api/contracts';
+import type {Place} from '@/types/api';
 
 export function ManagePlaces() {
   const [places, setPlaces] = useState<Place[]>([]);

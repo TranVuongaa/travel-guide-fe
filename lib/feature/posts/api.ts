@@ -1,5 +1,4 @@
 import {apiClient} from '@/lib/api/client';
-import {endpoints} from '@/lib/api/endpoints';
 import {unwrapApiSuccess} from '@/lib/api/response';
 
 import type {
@@ -11,7 +10,13 @@ import type {
   Post,
   PostSource,
   UpdatePostInput,
-} from '@/lib/api/contracts';
+} from '@/types/api';
+
+const endpoints = {
+  all: '/api/v1/posts',
+  mine: '/api/v1/posts/mine',
+  one: (id: string) => `/api/v1/posts/${encodeURIComponent(id)}`,
+} as const;
 
 export type PostListParams = PaginationParams & {
   placeId?: string;
@@ -26,7 +31,7 @@ export const listPostsService = async (
   params: PostListParams = {},
   signal?: AbortSignal,
 ): Promise<PaginatedData<Post>> => {
-  const response = await apiClient.get<ApiSuccess<PaginatedData<Post>>>(endpoints.posts.all, {params, signal});
+  const response = await apiClient.get<ApiSuccess<PaginatedData<Post>>>(endpoints.all, {params, signal});
   return unwrapApiSuccess<PaginatedData<Post>>(response.data);
 };
 
@@ -34,26 +39,26 @@ export const listMyPostsService = async (
   params: MyPostListParams = {},
   signal?: AbortSignal,
 ): Promise<PaginatedData<Post>> => {
-  const response = await apiClient.get<ApiSuccess<PaginatedData<Post>>>(endpoints.posts.mine, {params, signal});
+  const response = await apiClient.get<ApiSuccess<PaginatedData<Post>>>(endpoints.mine, {params, signal});
   return unwrapApiSuccess<PaginatedData<Post>>(response.data);
 };
 
 export const getPostService = async (id: string, signal?: AbortSignal): Promise<Post> => {
-  const response = await apiClient.get<ApiSuccess<Post>>(endpoints.posts.one(id), {signal});
+  const response = await apiClient.get<ApiSuccess<Post>>(endpoints.one(id), {signal});
   return unwrapApiSuccess<Post>(response.data);
 };
 
 export const createPostService = async (input: CreatePostInput): Promise<Post> => {
-  const response = await apiClient.post<ApiSuccess<Post>>(endpoints.posts.all, input);
+  const response = await apiClient.post<ApiSuccess<Post>>(endpoints.all, input);
   return unwrapApiSuccess<Post>(response.data);
 };
 
 export const updatePostService = async (id: string, input: UpdatePostInput): Promise<Post> => {
-  const response = await apiClient.patch<ApiSuccess<Post>>(endpoints.posts.one(id), input);
+  const response = await apiClient.patch<ApiSuccess<Post>>(endpoints.one(id), input);
   return unwrapApiSuccess<Post>(response.data);
 };
 
 export const deletePostService = async (id: string): Promise<Post> => {
-  const response = await apiClient.delete<ApiSuccess<Post>>(endpoints.posts.one(id));
+  const response = await apiClient.delete<ApiSuccess<Post>>(endpoints.one(id));
   return unwrapApiSuccess<Post>(response.data);
 };

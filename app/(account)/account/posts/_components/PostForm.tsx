@@ -5,10 +5,10 @@ import {useRouter} from 'next/navigation';
 
 import {routes} from '@/config/routes';
 import {normalizeAppError} from '@/lib/api/errors';
-import {listPlacesService} from '@/lib/api/places';
-import {createPostService, getPostService, updatePostService} from '@/lib/api/posts';
+import {listPlacesService} from '@/lib/feature/places/api';
+import {createPostService, getPostService, updatePostService} from '@/lib/feature/posts/api';
 
-import type {Place} from '@/lib/api/contracts';
+import type {Place} from '@/types/api';
 
 export function PostForm({postId}: Readonly<{postId?: string}>) {
   const router = useRouter();
