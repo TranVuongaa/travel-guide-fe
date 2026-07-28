@@ -20,7 +20,7 @@ Keywords:
 - Do not add Route Handlers under `app/api`.
 - Do not add Server Actions or files marked with `'use server'`.
 - Do not add database clients, ORM schemas, queues, webhooks, cron jobs, or backend business logic.
-- Application API requests MUST go through the shared Axios client and feature services.
+- Application API requests MUST go through the shared Axios client and domain API service modules under `lib/api/`.
 - Dynamic external API requests MUST originate from Client Components, client Hooks, or Redux thunks.
 - Server Components MAY render static/local content and compose the page shell, but MUST NOT call the application API.
 - If a feature requires a server-only credential, signed request, webhook, or privileged operation, record it as a
@@ -154,7 +154,7 @@ Use this order, separated into logical groups when it improves readability:
 
 1. React and Next.js.
 2. Third-party packages.
-3. Internal aliases such as `@/features` and `@/components`.
+3. Internal aliases such as `@/lib`, `@/components`, and `@/store`.
 4. Relative imports.
 5. Type-only imports.
 6. Styles.
@@ -162,7 +162,8 @@ Use this order, separated into logical groups when it improves readability:
 - Use `import type` for imports used only as types.
 - Prefer the configured `@/` alias over long parent-relative paths.
 - Avoid barrel files that create circular dependencies or hide large dependency graphs.
-- Do not import across feature internals. Import only a feature's documented public modules.
+- Do not import another route's private folders. Route-private modules may import ancestor private modules and root
+  shared modules.
 
 ## React and Next.js
 
@@ -193,10 +194,14 @@ Use this order, separated into logical groups when it improves readability:
 
 ### Routes and navigation
 
-- Use the App Router under `src/app`.
+- Use the App Router under the root `app/` directory. This project intentionally does not use `src/`.
 - Route segments and URLs use lowercase kebab-case.
 - Use route groups such as `(public)` and `(authenticated)` only for layout organization; they do not change URLs.
-- Keep `page.tsx` and `layout.tsx` small. Move interactive behavior into feature components.
+- Use private folders such as `_components` and `_hooks` to colocate route implementation without creating URL
+  segments.
+- Keep `page.tsx` and `layout.tsx` small. Move interactive behavior into route-private or genuinely shared components.
+- Do not add a top-level `features/` directory. Route-specific code stays beside its route; cross-route code belongs
+  in an appropriate root shared folder.
 - Use `next/link` for internal navigation.
 - Use `useRouter` only for imperative navigation that cannot be expressed with a link.
 - Put filter, sort, pagination, and shareable selection state in URL search parameters when appropriate.
@@ -233,10 +238,10 @@ The standard flow is:
 Client Component
   -> typed dispatch
     -> async thunk
-      -> feature service
+      -> domain API service
         -> shared Axios client
           -> external API
-    -> feature slice
+    -> shared-state slice
   -> typed selector
     -> Client Component
 ```
@@ -253,14 +258,14 @@ Client Component
 - Return normalized, serializable rejection values with `rejectWithValue`.
 - Do not put callbacks, Promises, errors, class instances, `Map`, or `Set` in actions or state.
 - Keep derived data in selectors.
-- Do not store every API response globally. Feature-local data MAY stay in a Hook when no other consumer needs it.
+- Do not store every API response globally. Route-local data MAY stay in a Hook when no other consumer needs it.
 - This architecture does not use RTK Query unless the project overview explicitly changes that decision.
 
 ## Axios and external APIs
 
 ### Shared client
 
-- Create the Axios instance in `src/lib/api/client.ts`.
+- Create the Axios instance in `lib/api/client.ts`.
 - Read the base URL from `NEXT_PUBLIC_API_BASE_URL`.
 - A `NEXT_PUBLIC_*` variable is visible to every browser user. It MUST NOT contain a secret.
 - Configure timeout, safe default headers, credentials behavior, and interceptors in one place.
@@ -273,12 +278,12 @@ Client Component
 
 ### Services and errors
 
-- Feature service modules are the only modules that call the shared Axios client.
+- Domain API service modules under `lib/api/` are the only modules that call the shared Axios client.
 - Services define request/response types and return domain data, not raw Axios responses, unless the contract requires
   response metadata.
 - Components MUST NOT call Axios directly.
 - Slices and reducers MUST NOT call Axios.
-- Endpoints live in one shared endpoint module or next to their feature service; do not scatter raw path strings
+- Endpoints live in one shared endpoint module or the relevant domain API module; do not scatter raw path strings
   through UI code.
 - Convert Axios failures into a serializable application error:
 

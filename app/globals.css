@@ -9,6 +9,12 @@
   --accent: #f4c82e;
   --brand: #612884;
   --focus: #7c3fa0;
+  --success: #23623a;
+  --success-soft: #e4f2e8;
+  --warning: #7a5300;
+  --warning-soft: #fff0bd;
+  --danger: #9b2c2c;
+  --danger-soft: #fde8e8;
 }
 
 @theme inline {
@@ -20,6 +26,12 @@
   --color-accent: var(--accent);
   --color-brand: var(--brand);
   --color-focus: var(--focus);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --font-sans: var(--font-be-vietnam-pro);
   --font-display: var(--font-noto-serif);
   --radius-panel: 1.75rem;
@@ -39,9 +51,142 @@ html {
 
 body {
   min-width: 20rem;
+  overflow-x: clip;
   background: var(--canvas);
   color: var(--ink);
   font-family: var(--font-be-vietnam-pro), Arial, Helvetica, sans-serif;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 9999px;
+  background: var(--accent);
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.app-nav-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  flex: none;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.5rem 0.875rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.app-nav-link:hover,
+.app-nav-link:focus-visible {
+  background: var(--surface);
+  color: var(--ink);
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 2px var(--focus);
+}
+
+.button-primary,
+.button-secondary,
+.button-danger {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.button-primary {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.button-secondary {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.button-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.button-primary:hover,
+.button-secondary:hover,
+.button-danger:hover {
+  transform: translateY(-1px);
+}
+
+.button-primary:focus-visible,
+.button-secondary:focus-visible,
+.button-danger:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled,
+.button-danger:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.field-control {
+  min-height: 2.875rem;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  padding: 0.7rem 0.9rem;
+  color: var(--ink);
+}
+
+.field-control:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.field-control[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 
 ::selection {

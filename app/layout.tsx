@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro, Noto_Serif } from 'next/font/google';
 
+import {AppFooter} from '@/components/layout/AppFooter';
+import {AppHeader} from '@/components/layout/AppHeader';
+
+import {AppProviders} from './providers';
+
 import './globals.css';
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -17,7 +22,10 @@ const notoSerif = Noto_Serif({
 });
 
 export const metadata: Metadata = {
-  title: 'Vạn Nẻo — Cẩm nang du hành Việt Nam',
+  title: {
+    default: 'Vạn Nẻo — Cẩm nang du hành Việt Nam',
+    template: '%s — Vạn Nẻo',
+  },
   description:
     'Những chỉ dẫn được tuyển chọn để đi sâu hơn vào cảnh sắc, văn hóa và nhịp sống bản địa Việt Nam.',
 };
@@ -33,7 +41,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${beVietnamPro.variable} ${notoSerif.variable} antialiased`}
     >
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <AppProviders>
+          <a href='#main-content' className='skip-link'>
+            Bỏ qua đến nội dung
+          </a>
+          <AppHeader />
+          <main id='main-content'>{children}</main>
+          <AppFooter />
+        </AppProviders>
+      </body>
     </html>
   );
 }

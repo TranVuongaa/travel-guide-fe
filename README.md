@@ -1,34 +1,54 @@
-# Next.js TypeScript Frontend Context and Standards
+# Vạn Nẻo frontend
 
-This folder is a reusable AI context template for frontend-only Next.js projects.
+Frontend-only Next.js App Router application for the Vietnam Travel Guide API.
 
-It assumes:
+## Local setup
 
-- Next.js with the App Router.
-- TypeScript in strict mode for all application source.
-- `.ts` for modules without JSX and `.tsx` for components or other modules containing JSX.
-- React functional components and Hooks.
-- Redux Toolkit for shared client state.
-- Axios for browser-to-API communication.
-- An independently deployed backend owns APIs, authentication, business logic, and data persistence.
+```powershell
+Copy-Item .env.example .env.local
+npm install
+npm run dev
+```
 
-Start by completing `ai-context/project-overview.md`. AI implementation work must then follow
-`ai-context/ai-workflow-rules.md`.
+Open `http://localhost:3000`. The confirmed API base URL is:
 
-## Frontend-only boundary
+```env
+NEXT_PUBLIC_API_BASE_URL=http://52.62.25.92
+```
 
-Next.js is used as the web UI and delivery framework. It is not the application backend.
+The application preserves HTTP and does not configure HSTS, an HTTPS redirect, or
+`upgrade-insecure-requests`. The backend must allow the frontend origin through CORS.
 
-- Browser-side Axios services call the external API.
-- Axios request/response contracts, Redux state, component props, Hooks, and environment configuration are typed.
-- Do not add Route Handlers, Server Actions, database clients, ORM code, or backend business logic.
-- Do not expose secrets through `NEXT_PUBLIC_*` variables.
-- The external API must support the browser origin and own authentication security.
-- If an integration requires a server-only secret, implement it in the external backend, not in this project.
+## Google OAuth
 
-## Context files
+Google login and account linking remain unavailable until both variables are supplied:
 
-- `ai-context/project-overview.md`: Product scope, user flows, API ownership, and project decisions.
-- `ai-context/architecture-context.md`: Folder structure, dependency rules, and frontend/API boundaries.
-- `ai-context/code-standards.md`: TypeScript, React, Next.js, Redux Toolkit, Axios, styling, and testing rules.
-- `ai-context/ai-workflow-rules.md`: Required prompt, confirmation, implementation, and validation workflow.
+```env
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-browser-client-id
+NEXT_PUBLIC_GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
+```
+
+In Google Cloud Console:
+
+1. Create an OAuth 2.0 Web application client.
+2. Add the frontend origin, for example `http://localhost:3000`, to Authorized JavaScript origins.
+3. Add the exact callback URL to Authorized redirect URIs.
+4. Copy the client ID into `.env.local` and restart Next.js.
+
+The frontend uses Authorization Code with PKCE in a popup. No Google client secret belongs in this repository.
+
+## Checks
+
+```powershell
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+## Security notes
+
+- Access and refresh tokens are held only in module memory.
+- Reloading the page intentionally ends the local session.
+- Route guards are UX only; the external API remains the authorization authority.
+- Apple login and Apple account linking are not implemented.

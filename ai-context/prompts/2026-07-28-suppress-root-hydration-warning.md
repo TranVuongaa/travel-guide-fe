@@ -1,9 +1,9 @@
 ---
 id: "2026-07-28-suppress-root-hydration-warning"
-status: in-progress
+status: completed
 created_at: "2026-07-28T20:36:10+07:00"
 confirmed_at: "2026-07-28T20:36:10+07:00"
-completed_at: null
+completed_at: "2026-07-28T20:37:04+07:00"
 ---
 
 # Goal

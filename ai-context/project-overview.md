@@ -4,35 +4,67 @@ Complete this document before implementation begins. Do not guess missing produc
 
 ## Goal
 
-<!-- Describe the product and the user problem it solves. -->
+Vạn Nẻo is a Vietnamese travel-guide and community frontend. Anonymous visitors explore published destinations,
+stories, reviews, comments, and reactions. Signed-in members manage their profile and contribute posts, reviews,
+comments, and reactions. Editors manage destinations. Administrators manage users, provinces, and categories.
 
 ## Core User Flows
 
-<!-- Example:
-1. The user signs in through the external API.
-2. The user opens the dashboard.
-3. The user views and updates a resource.
--->
+1. An anonymous visitor browses, searches, filters, and opens published destinations and stories.
+2. A visitor reads reviews and comment threads, including public reaction counts, without signing in.
+3. A visitor registers or signs in with email/password; Google OAuth is available when its public environment
+   configuration is supplied.
+4. A member updates their profile/password, links or unlinks Google, and manages their own posts and reviews.
+5. A member creates, edits, or soft-deletes owned comments and changes or removes reactions.
+6. An `EDITOR` or `ADMIN` creates, updates, and soft-removes destinations.
+7. An `ADMIN` manages users, roles, active status, provinces, and categories.
+8. A visitor checks external API availability from the status page.
 
 ## Route Map
 
-<!-- List public and authenticated browser routes and their purpose. -->
+- `/`: Branded discovery landing page with live destination and story previews.
+- `/destinations`: Public place discovery with search, filters, sorting, and pagination.
+- `/destinations/[id]`: Public place detail, reviews, comments, and reactions.
+- `/stories`: Public post discovery with search, filters, and pagination.
+- `/stories/[id]`: Public story detail, comments, replies, and reactions.
+- `/login`, `/register`: Email authentication and optional Google login.
+- `/auth/google/callback`: Same-origin Google PKCE popup callback.
+- `/status`: Public external API health check.
+- `/account/profile`: Authenticated profile, password, OAuth links, and session controls.
+- `/account/posts`, `/account/posts/new`, `/account/posts/[id]/edit`: Current-user post management.
+- `/account/reviews`: Current-user review management.
+- `/manage/places`, `/manage/places/new`, `/manage/places/[id]/edit`: `EDITOR`/`ADMIN` destination management.
+- `/admin/users`: `ADMIN` user inspection, role changes, and activation/deactivation.
+- `/admin/provinces`, `/admin/categories`: `ADMIN` reference-data CRUD.
 
 ## External API
 
-- API owner: <!-- Team or service that owns the backend. -->
+- API owner: Independently deployed Vietnam Travel Guide backend.
 - Base URL variable: `NEXT_PUBLIC_API_BASE_URL`
-- Authentication method: <!-- Prefer secure cookies owned by the backend; document the actual contract. -->
-- API contract source: <!-- OpenAPI URL, documentation, types package, or other source of truth. -->
-- Browser origins/CORS: <!-- Document allowed local, staging, and production origins. -->
+- Current base URL: `http://52.62.25.92`
+- Authentication method: Bearer access token plus rotating refresh token returned to browser JavaScript. Both tokens
+  are kept only in module memory and are never persisted in Redux or browser storage.
+- API contract source: OpenAPI 3.0 at `http://52.62.25.92/api/docs-json` (`Vietnam Travel Guide API` v1.0).
+- Browser origins/CORS: `http://localhost:3000` is confirmed. Other HTTP deployment origins must be allowed by the
+  backend.
+- Public access: health, provinces, categories, published places/posts/reviews/comments, and reaction summaries.
+- Protected access: current/admin user reads, current-user posts/reviews, and all non-auth mutations.
+- Client UX roles: `ADMIN` for users/provinces/categories; `EDITOR|ADMIN` for places; authenticated ownership for
+  community content. Backend authorization is authoritative.
+- Apple login and Apple account linking are intentionally not implemented.
 
 ## State Ownership
 
-<!-- Identify local component state, URL state, and Redux state. Keep Redux limited to shared client state. -->
+- Component/route Hook state: API lists, details, forms, mutation progress, dialogs, and route-specific errors.
+- URL state: Search, filters, sort selections, and pagination.
+- Redux Toolkit: Current authenticated user and shared authentication request state.
+- Module memory: Access token, refresh token, refresh single-flight coordination, and transient Google PKCE state.
+- External API: Source of truth for users, reference data, destinations, content, comments, and reactions.
 
 ## Localization
 
-<!-- List supported locales and the localization library, or state that localization is not required. -->
+Vietnamese is the single supported UI language. No localization dependency is enabled. Dates and numbers use
+Vietnamese `Intl` formatting.
 
 ## Styling and Design System
 
@@ -47,7 +79,10 @@ Complete this document before implementation begins. Do not guess missing produc
 
 ## Testing
 
-<!-- Record the unit, component, and end-to-end testing tools used by the project. -->
+- Vitest with jsdom.
+- Testing Library DOM matchers, React rendering, and user-event.
+- Tests mock or isolate the network boundary and never call the live API.
+- Required checks: lint, strict TypeScript, deterministic tests, and production build.
 
 ## Confirmed Decisions
 
@@ -58,9 +93,22 @@ Complete this document before implementation begins. Do not guess missing produc
 - Next.js Route Handlers, Server Actions, database access, ORM code, and server-side secrets are out of scope.
 - Tailwind CSS v4 and semantic theme tokens are the project styling standard.
 - Yellow, near-black, purple, and a Vietnamese crane motif define the current visual direction.
+- The root `app/` App Router is retained; this project does not use `src/` or a top-level `features/` directory.
+- Route-specific implementation is colocated in private `_components/` and `_hooks/` folders. Cross-route code lives
+  in root shared folders.
+- The frontend and backend are expected to run over HTTP. The application preserves the configured HTTP scheme and
+  does not emit HSTS, HTTPS redirects, or `upgrade-insecure-requests`.
+- Google OAuth code is implemented but remains unavailable until both `NEXT_PUBLIC_GOOGLE_CLIENT_ID` and
+  `NEXT_PUBLIC_GOOGLE_REDIRECT_URI` are configured.
 
 ## Open Questions
 
 - Final product name and production logo are not yet confirmed. `Vạn Nẻo` and the current crane artwork are an
   implementation-ready visual direction that may be replaced when brand assets are supplied.
-- Destination data, search, itinerary building, localization scope, and external API contracts remain undefined.
+- Persistent sign-in requires a backend-owned secure cookie contract; the current memory-only session ends on reload.
+- Google Console browser client configuration and exact redirect allowlisting remain to be supplied.
+- Browser HTTPS-First settings, cached HSTS, proxies, DNS, and hosting-platform redirects are outside application
+  control.
+- The API does not expose the current user's selected reaction, so selected-state restoration is unavailable after a
+  reload.
+- Privileged live verification still requires non-production `EDITOR` and `ADMIN` credentials.
