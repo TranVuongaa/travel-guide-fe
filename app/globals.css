@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --canvas: #f7f1df;
+  --surface: #fffaf0;
+  --ink: #17130f;
+  --muted: #6f665d;
+  --line: #d6ccba;
+  --accent: #f4c82e;
+  --brand: #612884;
+  --focus: #7c3fa0;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-brand: var(--brand);
+  --color-focus: var(--focus);
+  --font-sans: var(--font-be-vietnam-pro);
+  --font-display: var(--font-noto-serif);
+  --radius-panel: 1.75rem;
+  --shadow-editorial: 0 1.75rem 5rem rgb(38 25 9 / 18%);
+  --spacing-page: clamp(1.25rem, 4vw, 4.5rem);
+  --spacing-section: clamp(5rem, 10vw, 9rem);
+  --container-content: 90rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-width: 20rem;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-be-vietnam-pro), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.nav-link {
+  position: relative;
+  border-radius: 0.125rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+  transition: color 180ms ease;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.4rem;
+  left: 0;
+  height: 0.125rem;
+  background: var(--brand);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 180ms ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--ink);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-link:focus-visible {
+  box-shadow:
+    0 0 0 0.25rem var(--canvas),
+    0 0 0 0.375rem var(--focus);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--brand);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 2.5rem;
+  height: 0.0625rem;
+  background: currentColor;
+  content: "";
+}
+
+.editorial-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 18%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 18%) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+}
+
+.crane-float {
+  animation: crane-float 7s ease-in-out infinite;
+  filter: drop-shadow(0 1.5rem 1.5rem rgb(23 19 15 / 20%));
+}
+
+@keyframes crane-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-0.75rem) rotate(1deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

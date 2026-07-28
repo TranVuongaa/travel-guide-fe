@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js TypeScript Frontend Context and Standards
 
-## Getting Started
+This folder is a reusable AI context template for frontend-only Next.js projects.
 
-First, run the development server:
+It assumes:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js with the App Router.
+- TypeScript in strict mode for all application source.
+- `.ts` for modules without JSX and `.tsx` for components or other modules containing JSX.
+- React functional components and Hooks.
+- Redux Toolkit for shared client state.
+- Axios for browser-to-API communication.
+- An independently deployed backend owns APIs, authentication, business logic, and data persistence.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start by completing `ai-context/project-overview.md`. AI implementation work must then follow
+`ai-context/ai-workflow-rules.md`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Frontend-only boundary
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Next.js is used as the web UI and delivery framework. It is not the application backend.
 
-## Learn More
+- Browser-side Axios services call the external API.
+- Axios request/response contracts, Redux state, component props, Hooks, and environment configuration are typed.
+- Do not add Route Handlers, Server Actions, database clients, ORM code, or backend business logic.
+- Do not expose secrets through `NEXT_PUBLIC_*` variables.
+- The external API must support the browser origin and own authentication security.
+- If an integration requires a server-only secret, implement it in the external backend, not in this project.
 
-To learn more about Next.js, take a look at the following resources:
+## Context files
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `ai-context/project-overview.md`: Product scope, user flows, API ownership, and project decisions.
+- `ai-context/architecture-context.md`: Folder structure, dependency rules, and frontend/API boundaries.
+- `ai-context/code-standards.md`: TypeScript, React, Next.js, Redux Toolkit, Axios, styling, and testing rules.
+- `ai-context/ai-workflow-rules.md`: Required prompt, confirmation, implementation, and validation workflow.
