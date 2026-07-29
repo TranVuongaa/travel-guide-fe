@@ -189,26 +189,26 @@ textarea {
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-.story-content {
+.rich-content {
   margin-top: 2.5rem;
   color: color-mix(in srgb, var(--ink) 85%, transparent);
   font-size: 1.125rem;
   line-height: 2;
 }
 
-.story-content > * + * {
+.rich-content > * + * {
   margin-top: 1.5rem;
 }
 
-.story-content figure {
+.rich-content figure {
   margin-block: 2.5rem;
 }
 
-.story-content figure:first-child {
+.rich-content figure:first-child {
   margin-top: 0;
 }
 
-.story-content img {
+.rich-content img {
   display: block;
   width: 100%;
   height: auto;
@@ -217,48 +217,48 @@ textarea {
   background: var(--surface);
 }
 
-.story-content figcaption {
+.rich-content figcaption {
   margin-top: 0.75rem;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.6;
 }
 
-.story-content h2,
-.story-content h3 {
+.rich-content h2,
+.rich-content h3 {
   font-family: var(--font-noto-serif), Georgia, serif;
   font-weight: 600;
   line-height: 1.2;
 }
 
-.story-content h2 {
+.rich-content h2 {
   margin-top: 3rem;
   font-size: clamp(1.75rem, 5vw, 2.5rem);
 }
 
-.story-content h3 {
+.rich-content h3 {
   margin-top: 2.5rem;
   font-size: clamp(1.4rem, 4vw, 1.875rem);
 }
 
-.story-content ul,
-.story-content ol {
+.rich-content ul,
+.rich-content ol {
   padding-left: 1.5rem;
 }
 
-.story-content ul {
+.rich-content ul {
   list-style: disc;
 }
 
-.story-content ol {
+.rich-content ol {
   list-style: decimal;
 }
 
-.story-content li + li {
+.rich-content li + li {
   margin-top: 0.5rem;
 }
 
-.story-content blockquote {
+.rich-content blockquote {
   border-left: 0.25rem solid var(--brand);
   background: var(--surface);
   padding: 1.25rem clamp(1.25rem, 4vw, 2rem);
@@ -268,12 +268,12 @@ textarea {
   line-height: 1.75;
 }
 
-.story-content hr {
+.rich-content hr {
   border: 0;
   border-top: 1px solid var(--line);
 }
 
-.story-content a {
+.rich-content a {
   border-radius: 0.125rem;
   color: var(--brand);
   font-weight: 600;
@@ -282,11 +282,11 @@ textarea {
   text-underline-offset: 0.18em;
 }
 
-.story-content a:hover {
+.rich-content a:hover {
   color: var(--ink);
 }
 
-.story-content a:focus-visible {
+.rich-content a:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 0.2rem;
 }

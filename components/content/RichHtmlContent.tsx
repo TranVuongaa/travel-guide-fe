@@ -27,10 +27,10 @@ const REMOVED_WITH_CONTENT_TAGS = new Set([
   'template',
 ]);
 
-declare const sanitizedPostHtmlBrand: unique symbol;
+declare const sanitizedRichHtmlBrand: unique symbol;
 
-export type SanitizedPostHtml = string & {
-  readonly [sanitizedPostHtmlBrand]: true;
+export type SanitizedRichHtml = string & {
+  readonly [sanitizedRichHtmlBrand]: true;
 };
 
 const getSafeAbsoluteHttpUrl = (value: string): string | null => {
@@ -96,7 +96,7 @@ const sanitizeLink = (element: Element): void => {
   element.setAttribute('rel', 'noreferrer noopener');
 };
 
-export const sanitizePostHtml = (html: string): SanitizedPostHtml => {
+export const sanitizeRichHtml = (html: string): SanitizedRichHtml => {
   const parsedDocument = new DOMParser().parseFromString(html, 'text/html');
 
   for (const element of Array.from(parsedDocument.body.querySelectorAll('*'))) {
@@ -127,15 +127,15 @@ export const sanitizePostHtml = (html: string): SanitizedPostHtml => {
     }
   }
 
-  return parsedDocument.body.innerHTML as SanitizedPostHtml;
+  return parsedDocument.body.innerHTML as SanitizedRichHtml;
 };
 
-export function StoryContent({html}: Readonly<{html: SanitizedPostHtml}>) {
+export function RichHtmlContent({html}: Readonly<{html: SanitizedRichHtml}>) {
   return (
     <div
-      className='story-content'
-      // The branded value can only be produced by the allowlist sanitizer above. The backend also sanitizes this
-      // field according to the Post API contract; this browser pass provides defense in depth before HTML insertion.
+      className='rich-content'
+      // Only the branded value produced by the allowlist sanitizer is accepted here. The external API remains
+      // responsible for sanitizing stored HTML; this browser pass provides defense in depth before insertion.
       dangerouslySetInnerHTML={{__html: html}}
     />
   );

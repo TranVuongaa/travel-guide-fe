@@ -1,13 +1,13 @@
 import {cleanup, render, screen} from '@testing-library/react';
 import {afterEach, describe, expect, it} from 'vitest';
 
-import {sanitizePostHtml, StoryContent} from './StoryContent';
+import {RichHtmlContent, sanitizeRichHtml} from './RichHtmlContent';
 
 afterEach(cleanup);
 
-describe('StoryContent', () => {
+describe('RichHtmlContent', () => {
   it('renders the API article structure, figure, caption, and safe source link', () => {
-    const html = sanitizePostHtml(`
+    const html = sanitizeRichHtml(`
       <figure>
         <img
           src="https://images.example.com/hue.jpg"
@@ -25,7 +25,7 @@ describe('StoryContent', () => {
       <blockquote>Kiểm tra giờ mở cửa trước ngày tham quan.</blockquote>
     `);
 
-    const {container} = render(<StoryContent html={html} />);
+    const {container} = render(<RichHtmlContent html={html} />);
 
     expect(container.querySelector('figure')).toBeInTheDocument();
     expect(screen.getByAltText('Công trình bên trong Đại Nội Huế')).toHaveAttribute('loading', 'lazy');
@@ -44,7 +44,7 @@ describe('StoryContent', () => {
   });
 
   it('removes executable content, unsafe URLs, and unapproved attributes', () => {
-    const html = sanitizePostHtml(`
+    const html = sanitizeRichHtml(`
       <script>alert('unsafe')</script>
       <p onclick="alert('unsafe')" style="display:none">Nội dung an toàn</p>
       <a href="javascript:alert('unsafe')">Liên kết không an toàn</a>
@@ -52,7 +52,7 @@ describe('StoryContent', () => {
       <iframe src="https://unsafe.example.com">Khung không an toàn</iframe>
     `);
 
-    const {container} = render(<StoryContent html={html} />);
+    const {container} = render(<RichHtmlContent html={html} />);
 
     expect(container.querySelector('script')).not.toBeInTheDocument();
     expect(container.querySelector('iframe')).not.toBeInTheDocument();

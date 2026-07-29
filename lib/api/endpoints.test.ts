@@ -24,6 +24,7 @@ describe('API_ENDPOINTS', () => {
       API_ENDPOINTS.comments.all,
       API_ENDPOINTS.reactions.all,
       API_ENDPOINTS.reactions.summary,
+      API_ENDPOINTS.admin.travelContentIngestions,
     ];
 
     expect(staticEndpoints.every((endpoint) => endpoint.startsWith('/api/v1/'))).toBe(true);

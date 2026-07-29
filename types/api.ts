@@ -6,6 +6,7 @@ export type TargetType = 'POST' | 'REVIEW' | 'COMMENT';
 export type CommentTargetType = Exclude<TargetType, 'COMMENT'>;
 export type ReactionType = 'LIKE' | 'LOVE' | 'WOW' | 'SAD' | 'ANGRY';
 export type PostSource = 'SYSTEM' | 'USER';
+export type TravelContentIngestionStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'PARTIAL' | 'FAILED';
 
 export type ResponseMeta = {
   timestamp: string;
@@ -24,6 +25,21 @@ export type PaginatedData<T> = {
   limit: number;
   totalItems: number;
   totalPages: number;
+};
+
+export type TravelContentIngestionRun = {
+  id: string;
+  status: TravelContentIngestionStatus;
+  trendKeywordCount: number;
+  discoveredUrlCount: number;
+  importedPostCount: number;
+  duplicateCount: number;
+  skippedCount: number;
+  failedCount: number;
+  errorSummary?: Record<string, unknown> | null;
+  createdAt: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
 };
 
 export type PaginationParams = {
@@ -88,6 +104,7 @@ export type Place = {
   name: string;
   slug: string;
   description: string;
+  content?: string | null;
   address: string | null;
   latitude: number | null;
   longitude: number | null;
@@ -215,6 +232,7 @@ export type ChangePasswordInput = {
 export type CreatePlaceInput = {
   name: string;
   description: string;
+  content?: string;
   address?: string;
   latitude?: number;
   longitude?: number;

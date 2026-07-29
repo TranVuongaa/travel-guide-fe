@@ -15,6 +15,7 @@ export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [content, setContent] = useState('');
   const [address, setAddress] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
@@ -39,6 +40,7 @@ export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
         if (place) {
           setName(place.name);
           setDescription(place.description);
+          setContent(place.content ?? '');
           setAddress(place.address ?? '');
           setLatitude(place.latitude?.toString() ?? '');
           setLongitude(place.longitude?.toString() ?? '');
@@ -68,6 +70,10 @@ export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
       setError('Mô tả là bắt buộc.');
       return;
     }
+    if (content.length > 100000) {
+      setError('Nội dung điểm đến không được vượt quá 100.000 ký tự.');
+      return;
+    }
     if (!provinceId || categoryIds.length === 0) {
       setError('Hãy chọn tỉnh thành và ít nhất một danh mục.');
       return;
@@ -81,9 +87,11 @@ export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
       return;
     }
 
+    const trimmedContent = content.trim();
     const input = {
       name: name.trim(),
       description: description.trim(),
+      ...(trimmedContent ? {content: trimmedContent} : {}),
       address: address.trim() || undefined,
       latitude: latitudeNumber,
       longitude: longitudeNumber,
@@ -118,6 +126,23 @@ export function PlaceForm({placeId}: Readonly<{placeId?: string}>) {
       <div>
         <label className='field-label' htmlFor='place-description'>Mô tả</label>
         <textarea id='place-description' value={description} onChange={(event) => setDescription(event.target.value)} className='field-control min-h-44' required />
+      </div>
+      <div>
+        <label className='field-label' htmlFor='place-content'>Nội dung điểm đến (HTML)</label>
+        <textarea
+          id='place-content'
+          value={content}
+          maxLength={100000}
+          onChange={(event) => setContent(event.target.value)}
+          className='field-control min-h-64 font-mono text-sm leading-6'
+          aria-describedby='place-content-help place-content-count'
+        />
+        <p id='place-content-help' className='mt-2 text-xs leading-5 text-muted'>
+          Không bắt buộc. Nội dung HTML sẽ hiển thị như một bài viết chi tiết khi API hỗ trợ trường content.
+        </p>
+        <p id='place-content-count' className='mt-1 text-xs text-muted'>
+          {content.length.toLocaleString('vi-VN')} / 100.000 ký tự
+        </p>
       </div>
       <div>
         <label className='field-label' htmlFor='place-address'>Địa chỉ</label>

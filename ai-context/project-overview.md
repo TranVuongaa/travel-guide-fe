@@ -6,7 +6,8 @@ Complete this document before implementation begins. Do not guess missing produc
 
 Vạn Nẻo is a Vietnamese travel-guide and community frontend. Anonymous visitors explore published destinations,
 stories, reviews, comments, and reactions. Signed-in members manage their profile and contribute posts, reviews,
-comments, and reactions. Editors manage destinations. Administrators manage users, provinces, and categories.
+comments, and reactions. Editors manage destinations. Administrators manage users, provinces, categories, and
+travel-content ingestion runs.
 
 ## Core User Flows
 
@@ -34,6 +35,8 @@ comments, and reactions. Editors manage destinations. Administrators manage user
 - `/manage/places`, `/manage/places/new`, `/manage/places/[id]/edit`: `EDITOR`/`ADMIN` destination management.
 - `/admin/users`: `ADMIN` user inspection, role changes, and activation/deactivation.
 - `/admin/provinces`, `/admin/categories`: `ADMIN` reference-data CRUD.
+- `/admin/travel-content-ingestions`: `ADMIN` action to queue a backend travel-content scraping run and inspect its
+  accepted snapshot.
 
 ## External API
 
@@ -49,9 +52,14 @@ comments, and reactions. Editors manage destinations. Administrators manage user
   place responses include ordered image metadata with source and license attribution fields.
 - Post responses include a required plain-text `description` for previews and a complete sanitized HTML `content`
   article body. Post mutation requests use the same fields, with 500- and 100,000-character limits respectively.
+- Destination rich HTML is prepared under an optional `content` key, but the external place API does not expose or
+  accept this field yet. Until its contract is finalized, the frontend treats it as optional and applies the same
+  shared allowlist rendering path used by story content.
 - Protected access: current/admin user reads, current-user posts/reviews, and all non-auth mutations.
-- Client UX roles: `ADMIN` for users/provinces/categories; `EDITOR|ADMIN` for places; authenticated ownership for
-  community content. Backend authorization is authoritative.
+- The administrator travel-content ingestion API accepts a bodyless queue request and returns the accepted run
+  snapshot. It does not currently expose progress polling, run history, cancellation, or retry endpoints.
+- Client UX roles: `ADMIN` for users/provinces/categories/content ingestion; `EDITOR|ADMIN` for places; authenticated
+  ownership for community content. Backend authorization is authoritative.
 - Apple login and Apple account linking are intentionally not implemented.
 
 ## State Ownership
@@ -119,6 +127,11 @@ Vietnamese `Intl` formatting.
   stable placeholders.
 - The API does not guarantee a narrow set of external image hosts, so remote entity images are loaded directly by the
   browser after HTTP(S) URL validation instead of through the Next.js image optimizer.
-- Rich post content is rendered only after a browser-side defense-in-depth allowlist pass, while the external backend
-  remains authoritative for sanitizing stored and returned HTML.
+- Rich story and destination content is rendered only after a shared browser-side defense-in-depth allowlist pass,
+  while the external backend remains authoritative for sanitizing stored and returned HTML.
+- The planned destination `content` API contract still needs confirmed nullability, mutation requiredness, length
+  limits, response coverage, and backend sanitization behavior. The frontend temporarily uses an optional value and
+  the story content limit of 100,000 characters.
 - Privileged live verification still requires non-production `EDITOR` and `ADMIN` credentials.
+- The travel-content ingestion contract currently supports queue acceptance only. A backend read endpoint is required
+  before the frontend can show live progress, final results, or run history.

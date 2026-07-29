@@ -17,4 +17,5 @@ export const routes = {
   adminUsers: '/admin/users',
   adminProvinces: '/admin/provinces',
   adminCategories: '/admin/categories',
+  adminTravelContentIngestions: '/admin/travel-content-ingestions',
 } as const;

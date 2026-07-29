@@ -6,19 +6,28 @@ import {normalizeAppError} from '@/lib/api/errors';
 import {getPlaceService} from '@/lib/feature/places/api';
 
 import {ReviewSection} from '@/components/community/ReviewSection';
+import {RichHtmlContent, sanitizeRichHtml} from '@/components/content/RichHtmlContent';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
 import {EntityImage, getOrderedEntityImages, getPrimaryEntityImage} from '@/components/ui/EntityImage';
 
 import type {Place} from '@/types/api';
+import type {SanitizedRichHtml} from '@/components/content/RichHtmlContent';
+
+type RenderablePlace = Omit<Place, 'content'> & {
+  content: SanitizedRichHtml | null;
+};
 
 export function DestinationDetail({id}: Readonly<{id: string}>) {
-  const [place, setPlace] = useState<Place | null>(null);
+  const [place, setPlace] = useState<RenderablePlace | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     getPlaceService(id, controller.signal)
-      .then(setPlace)
+      .then((nextPlace) => {
+        const content = nextPlace.content?.trim();
+        setPlace({...nextPlace, content: content ? sanitizeRichHtml(content) : null});
+      })
       .catch((loadError: unknown) => {
         if (!controller.signal.aborted) {
           setError(normalizeAppError(loadError).message);
@@ -67,6 +76,7 @@ export function DestinationDetail({id}: Readonly<{id: string}>) {
         <div className='mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]'>
           <div>
             <p className='whitespace-pre-wrap text-lg leading-8 text-muted'>{place.description}</p>
+            {place.content ? <RichHtmlContent html={place.content} /> : null}
             {place.address ? <p className='mt-6 rounded-2xl bg-surface p-4 text-sm'><strong>Địa chỉ:</strong> {place.address}</p> : null}
           </div>
           <aside className='card h-fit'>

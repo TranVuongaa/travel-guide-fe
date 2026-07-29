@@ -8,6 +8,7 @@ const adminLinks = [
   {href: routes.adminUsers, label: 'Người dùng'},
   {href: routes.adminProvinces, label: 'Tỉnh thành'},
   {href: routes.adminCategories, label: 'Danh mục'},
+  {href: routes.adminTravelContentIngestions, label: 'Thu thập nội dung'},
 ];
 
 export default function AdminLayout({children}: Readonly<{children: React.ReactNode}>) {

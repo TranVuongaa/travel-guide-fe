@@ -47,4 +47,7 @@ export const API_ENDPOINTS = {
     all: '/api/v1/reactions',
     summary: '/api/v1/reactions/summary',
   },
+  admin: {
+    travelContentIngestions: '/api/v1/admin/travel-content-ingestions',
+  },
 } as const;

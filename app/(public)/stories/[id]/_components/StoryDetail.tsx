@@ -8,15 +8,14 @@ import {formatDate} from '@/utils/format';
 
 import {CommentsThread} from '@/components/community/CommentsThread';
 import {ReactionBar} from '@/components/community/ReactionBar';
+import {RichHtmlContent, sanitizeRichHtml} from '@/components/content/RichHtmlContent';
 import {ErrorState, LoadingState} from '@/components/ui/AsyncState';
 
-import {sanitizePostHtml, StoryContent} from './StoryContent';
-
 import type {Post} from '@/types/api';
-import type {SanitizedPostHtml} from './StoryContent';
+import type {SanitizedRichHtml} from '@/components/content/RichHtmlContent';
 
 type RenderablePost = Omit<Post, 'content'> & {
-  content: SanitizedPostHtml;
+  content: SanitizedRichHtml;
 };
 
 export function StoryDetail({id}: Readonly<{id: string}>) {
@@ -27,7 +26,7 @@ export function StoryDetail({id}: Readonly<{id: string}>) {
     const controller = new AbortController();
     getPostService(id, controller.signal)
       .then((nextPost) => {
-        setPost({...nextPost, content: sanitizePostHtml(nextPost.content)});
+        setPost({...nextPost, content: sanitizeRichHtml(nextPost.content)});
       })
       .catch((loadError: unknown) => {
         if (!controller.signal.aborted) {
@@ -53,7 +52,7 @@ export function StoryDetail({id}: Readonly<{id: string}>) {
         <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
         <span>{post.source === 'SYSTEM' ? 'Biên tập' : 'Cộng đồng'}</span>
       </div>
-      <StoryContent html={post.content} />
+      <RichHtmlContent html={post.content} />
       <ReactionBar targetType='POST' targetId={post.id} initialCounts={post.reactionCounts} />
       <CommentsThread targetType='POST' targetId={post.id} />
     </article>
