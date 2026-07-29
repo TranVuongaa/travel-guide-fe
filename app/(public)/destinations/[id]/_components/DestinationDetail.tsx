@@ -51,7 +51,7 @@ export function DestinationDetail({id}: Readonly<{id: string}>) {
     <>
       <article>
         <p className='eyebrow'>{place.province.name}</p>
-        <h1 className='mt-5 max-w-5xl font-display text-[clamp(3.5rem,10vw,8rem)] font-semibold leading-[0.85] tracking-[-0.055em]'>{place.name}</h1>
+        <h1 className='mt-5 max-w-5xl font-display text-[clamp(2.75rem,7vw,6rem)] font-semibold leading-[0.9] tracking-[-0.055em]'>{place.name}</h1>
         <EntityImage
           image={primaryImage}
           altFallback={`Ảnh toàn cảnh ${place.name}`}
