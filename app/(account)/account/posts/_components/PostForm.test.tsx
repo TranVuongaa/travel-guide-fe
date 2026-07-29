@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {listPlacesService} from '@/lib/feature/places/api';
-import {createPostService} from '@/lib/feature/posts/api';
+import {createPostService, getPostService, updatePostService} from '@/lib/feature/posts/api';
 
 import {PostForm} from './PostForm';
 
@@ -80,17 +80,62 @@ describe('PostForm', () => {
 
     await user.type(screen.getByLabelText('Tiêu đề'), createdPost.title);
     await user.type(screen.getByLabelText('Mô tả ngắn'), createdPost.description);
-    await user.type(screen.getByLabelText('Nội dung bài viết (HTML)'), createdPost.content);
+    await screen.findByRole('textbox', {name: 'Nội dung bài viết'});
+    const linkButton = screen.getByRole('button', {name: 'Chèn liên kết'});
+    await waitFor(() => expect(linkButton).toBeEnabled());
+    await user.click(linkButton);
+    await user.type(screen.getByLabelText('Văn bản hiển thị'), 'Nội dung bài viết.');
+    await user.type(screen.getByLabelText('Địa chỉ liên kết'), 'https://example.com/bai-viet');
+    await user.click(screen.getByRole('button', {name: 'Chèn'}));
     await user.click(screen.getByRole('button', {name: 'Lưu bản nháp'}));
 
     await waitFor(() => {
       expect(createPostService).toHaveBeenCalledWith({
         title: createdPost.title,
         description: createdPost.description,
-        content: createdPost.content,
+        content:
+          '<p><a target="_blank" rel="noopener noreferrer nofollow" ' +
+          'href="https://example.com/bai-viet">Nội dung bài viết.</a></p>',
         placeId: undefined,
         publicationIntent: 'DRAFT',
       });
     });
+  });
+
+  it('loads existing HTML into the visual editor and submits its updated HTML', async () => {
+    const user = userEvent.setup();
+    vi.mocked(getPostService).mockResolvedValue(createdPost);
+    vi.mocked(updatePostService).mockResolvedValue({...createdPost, content: '<h2>Nội dung mới</h2>'});
+
+    render(<PostForm postId={createdPost.id} />);
+
+    const editor = await screen.findByRole('textbox', {name: 'Nội dung bài viết'});
+    expect(editor).toContainHTML(createdPost.content);
+
+    await user.click(screen.getByRole('button', {name: 'Tiêu đề cấp 2'}));
+    await user.click(screen.getByRole('button', {name: 'Lưu bản nháp'}));
+
+    await waitFor(() => {
+      expect(updatePostService).toHaveBeenCalledWith(
+        createdPost.id,
+        expect.objectContaining({
+          content: '<h2>Nội dung bài viết.</h2>',
+          publicationIntent: 'DRAFT',
+        }),
+      );
+    });
+  });
+
+  it('rejects a visually empty article body', async () => {
+    const user = userEvent.setup();
+    render(<PostForm />);
+
+    await user.type(screen.getByLabelText('Tiêu đề'), createdPost.title);
+    await user.type(screen.getByLabelText('Mô tả ngắn'), createdPost.description);
+    await screen.findByRole('textbox', {name: 'Nội dung bài viết'});
+    await user.click(screen.getByRole('button', {name: 'Lưu bản nháp'}));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Nội dung phải có từ 1 đến 100.000 ký tự.');
+    expect(createPostService).not.toHaveBeenCalled();
   });
 });

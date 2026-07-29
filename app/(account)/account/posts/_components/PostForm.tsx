@@ -8,6 +8,8 @@ import {normalizeAppError} from '@/lib/api/errors';
 import {listPlacesService} from '@/lib/feature/places/api';
 import {createPostService, getPostService, updatePostService} from '@/lib/feature/posts/api';
 
+import {isRichTextContentEmpty, RichTextEditor} from './RichTextEditor';
+
 import type {Place} from '@/types/api';
 
 export function PostForm({postId}: Readonly<{postId?: string}>) {
@@ -55,7 +57,7 @@ export function PostForm({postId}: Readonly<{postId?: string}>) {
       setError('Mô tả phải có từ 1 đến 500 ký tự.');
       return;
     }
-    if (!content.trim() || content.length > 100000) {
+    if (isRichTextContentEmpty(content) || content.length > 100000) {
       setError('Nội dung phải có từ 1 đến 100.000 ký tự.');
       return;
     }
@@ -126,21 +128,25 @@ export function PostForm({postId}: Readonly<{postId?: string}>) {
         </p>
       </div>
       <div>
-        <label className='field-label' htmlFor='post-content'>Nội dung bài viết (HTML)</label>
-        <textarea
-          id='post-content'
+        <p className='field-label' id='post-content-label'>Nội dung bài viết</p>
+        <RichTextEditor
           value={content}
+          onChange={setContent}
+          labelId='post-content-label'
+          descriptionIds='post-content-help post-content-count'
           maxLength={100000}
-          onChange={(event) => setContent(event.target.value)}
-          className='field-control min-h-80 font-mono text-sm'
-          aria-describedby='post-content-help post-content-count'
           required
         />
         <p id='post-content-help' className='mt-2 text-xs leading-5 text-muted'>
-          Dùng HTML có cấu trúc như đoạn văn, tiêu đề, danh sách, trích dẫn và hình ảnh có chú thích.
+          Soạn thảo trực quan với tiêu đề, danh sách, trích dẫn, liên kết và hình ảnh từ địa chỉ HTTP(S).
         </p>
-        <p id='post-content-count' className='mt-1 text-xs text-muted'>
+        <p
+          id='post-content-count'
+          className={`mt-1 text-xs ${content.length > 100000 ? 'text-danger' : 'text-muted'}`}
+          aria-live='polite'
+        >
           {content.length.toLocaleString('vi-VN')} / 100.000 ký tự
+          {content.length > 100000 ? ' · Vượt giới hạn' : ''}
         </p>
       </div>
       {error ? <p role='alert' className='rounded-xl bg-danger-soft p-3 text-danger'>{error}</p> : null}

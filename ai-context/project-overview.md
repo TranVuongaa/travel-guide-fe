@@ -111,6 +111,8 @@ Vietnamese `Intl` formatting.
   does not emit HSTS, HTTPS redirects, or `upgrade-insecure-requests`.
 - Google OAuth code is implemented but remains unavailable until both `NEXT_PUBLIC_GOOGLE_CLIENT_ID` and
   `NEXT_PUBLIC_GOOGLE_REDIRECT_URI` are configured.
+- The member post form uses a route-local Tiptap v3 visual editor that serializes supported article structure to the
+  existing HTML `content` field. The editor supports safe external HTTP(S) image URLs but does not upload files.
 
 ## Open Questions
 
@@ -132,6 +134,8 @@ Vietnamese `Intl` formatting.
 - The planned destination `content` API contract still needs confirmed nullability, mutation requiredness, length
   limits, response coverage, and backend sanitization behavior. The frontend temporarily uses an optional value and
   the story content limit of 100,000 characters.
+- Uploading article images requires an external media-storage/upload API contract. Until one is available, the post
+  editor accepts only externally hosted HTTP(S) image URLs with required alternative text.
 - Privileged live verification still requires non-production `EDITOR` and `ADMIN` credentials.
 - The travel-content ingestion contract currently supports queue acceptance only. A backend read endpoint is required
   before the frontend can show live progress, final results, or run history.

@@ -296,6 +296,208 @@ select.field-control:disabled {
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
+.rich-text-editor {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.rich-text-editor:focus-within {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 2px var(--focus);
+}
+
+.rich-text-editor[data-over-limit='true'] {
+  border-color: var(--danger);
+}
+
+.rich-text-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--canvas) 58%, var(--surface));
+  padding: 0.65rem;
+}
+
+.rich-text-toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-right: 1px solid var(--line);
+  padding-right: 0.5rem;
+}
+
+.rich-text-toolbar-group:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.rich-text-toolbar-button {
+  display: inline-flex;
+  min-width: 2.625rem;
+  min-height: 2.625rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.65rem;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.rich-text-toolbar-button:hover:not(:disabled) {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+.rich-text-toolbar-button[data-active='true'] {
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.rich-text-toolbar-button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.rich-text-toolbar-button:disabled {
+  cursor: not-allowed;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.rich-text-insert-panel {
+  display: grid;
+  gap: 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  padding: 1rem;
+}
+
+.rich-text-insert-error {
+  border-radius: 0.75rem;
+  background: var(--danger-soft);
+  padding: 0.7rem 0.8rem;
+  color: var(--danger);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.rich-text-editor-content {
+  min-height: 20rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  outline: none;
+}
+
+.rich-text-editor-content > * + * {
+  margin-top: 1rem;
+}
+
+.rich-text-editor-content h2,
+.rich-text-editor-content h3 {
+  font-family: var(--font-noto-serif), Georgia, serif;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.rich-text-editor-content h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.rich-text-editor-content h3 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+}
+
+.rich-text-editor-content ul,
+.rich-text-editor-content ol {
+  padding-left: 1.5rem;
+}
+
+.rich-text-editor-content ul {
+  list-style: disc;
+}
+
+.rich-text-editor-content ol {
+  list-style: decimal;
+}
+
+.rich-text-editor-content blockquote {
+  border-left: 0.25rem solid var(--brand);
+  background: color-mix(in srgb, var(--canvas) 58%, var(--surface));
+  padding: 0.9rem 1rem;
+  font-family: var(--font-noto-serif), Georgia, serif;
+}
+
+.rich-text-editor-content hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.rich-text-editor-content a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.rich-text-editor-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+}
+
+.rich-text-editor-content figure {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+}
+
+.rich-text-editor-content figure img {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+.rich-text-editor-content figcaption {
+  padding: 0.7rem 0.85rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.rich-text-editor-content .ProseMirror-selectednode {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (min-width: 48rem) {
+  .rich-text-insert-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rich-text-insert-panel > :nth-last-child(-n + 2) {
+    grid-column: 1 / -1;
+  }
+}
+
 .rich-content {
   margin-top: 2.5rem;
   color: color-mix(in srgb, var(--ink) 85%, transparent);
