@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-            cd ${{ secrets.EC2_FE_PROJECT_PATH }}
+            cd ${{ secrets.EC2_PROJECT_PATH }}
             git pull origin main
             docker compose up -d --build
             sleep 5
